@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion Clients - Responsable{% endblock %}
+
+{% block body %}
+<div class="container-fluid py-4">
+    <h1 class="mb-4"><i class="fas fa-users"></i> Gestion des Clients</h1>
+
+    {% if clients is empty %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Aucun client enregistré.
+        </div>
+    {% else %}
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom Complet</th>
+                                <th>Email</th>
+                                <th>Téléphone</th>
+                                <th>Rôle</th>
+                                <th>Statut</th>
+                                <th>Date Inscription</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for client in clients %}
+                                <tr>
+                                    <td>{{ client.id }}</td>
+                                    <td><strong>{{ client.prenom }} {{ client.nom }}</strong></td>
+                                    <td>{{ client.email }}</td>
+                                    <td>{{ client.telephone ?? 'N/A' }}</td>
+                                    <td>
+                                        {% if 'ROLE_OWNER' in client.roles %}
+                                            <span class="badge bg-warning">Owner</span>
+                                        {% elseif 'ROLE_RESPONSABLE' in client.roles %}
+                                            <span class="badge bg-info">Responsable</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Client</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ client.statutCompte == 'actif' ? 'success' : 'danger' }}">
+                                            {{ client.statutCompte|upper }}
+                                        </span>
+                                    </td>
+                                    <td>{{ client.dateInscription|date('d/m/Y') }}</td>
+                                    <td>
+                                        {% if client.statutCompte == 'actif' and 'ROLE_CLIENT' in client.roles %}
+                                            <form action="{{ path('app_responsable_client_suspend', {id: client.id}) }}" method="post" style="display: inline;">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('suspend' ~ client.id) }}">
+                                                <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Suspendre ce client ?')">
+                                                    <i class="fas fa-ban"></i> Suspendre
+                                                </button>
+                                            </form>
+                                        {% elseif client.statutCompte == 'suspendu' %}
+                                            <span class="text-muted">Suspendu</span>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

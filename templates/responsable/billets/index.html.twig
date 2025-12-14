@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion Billets - {{ evenement.titre }}{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1><i class="fas fa-ticket-alt"></i> Gestion des Billets</h1>
+            <p class="text-muted mb-0">Événement: {{ evenement.titre }}</p>
+        </div>
+        <div>
+            <a href="{{ path('app_responsable_billet_new', {id: evenement.id}) }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Nouveau Type de Billet
+            </a>
+            <a href="{{ path('app_responsable_evenement_detail', {id: evenement.id}) }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </div>
+
+    {% if billets is empty %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Aucun type de billet créé pour cet événement.
+        </div>
+    {% else %}
+        <div class="row g-4">
+            {% for billet in billets %}
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">{{ billet.nomType }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="h3 text-primary mb-3">{{ billet.prix }} MAD</p>
+                            
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span>Quantité totale:</span>
+                                    <strong>{{ billet.quantiteTotale }}</strong>
+                                </div>
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span>Restants:</span>
+                                    <strong class="text-warning">{{ billet.quantiteRestante }}</strong>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Vendus:</span>
+                                    <strong class="text-success">{{ billet.quantiteTotale - billet.quantiteRestante }}</strong>
+                                </div>
+                            </div>
+
+                            <div class="progress mb-3" style="height: 25px;">
+                                {% set pourcentage = ((billet.quantiteTotale - billet.quantiteRestante) / billet.quantiteTotale * 100)|round %}
+                                <div class="progress-bar bg-success" style="width: {{ pourcentage }}%">
+                                    {{ pourcentage }}%
+                                </div>
+                            </div>
+
+                            <span class="badge bg-{{ billet.statut == 'actif' ? 'success' : 'secondary' }}">
+                                {{ billet.statut|upper }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

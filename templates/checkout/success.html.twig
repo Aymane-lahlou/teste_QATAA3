@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement Réussi - Qataa3.ma{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle fa-5x text-success"></i>
+                    </div>
+                    
+                    <h1 class="text-success mb-3">Paiement Réussi !</h1>
+                    <p class="lead text-muted mb-4">
+                        Votre commande #{{ commande.id }} a été confirmée (mode démonstration)
+                    </p>
+
+                    <div class="alert alert-info mb-4">
+                        <i class="fas fa-info-circle"></i> Toutes les transactions sont effectuées en mode démonstration
+                    </div>
+
+                    <div class="row text-start mb-4">
+                        <div class="col-md-6">
+                            <p><strong>Date de commande:</strong><br>{{ commande.dateCommande|date('d/m/Y H:i') }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Montant total:</strong><br>{{ commande.montantTotal|number_format(2, '.', ',') }} MAD</p>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a href="{{ path('app_client_tickets') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-ticket-alt"></i> Voir mes tickets
+                        </a>
+                        <a href="{{ path('app_client_recus') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-receipt"></i> Télécharger le reçu
+                        </a>
+                        <a href="{{ path('app_home') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-home"></i> Retour à l'accueil
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mt-4">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-list"></i> Détails de la commande</h5>
+                    
+                    {% for ligne in commande.ligneCommandes %}
+                        <div class="border-bottom pb-3 mb-3">
+                            <h6>{{ ligne.typeBillet.evenement.titre }}</h6>
+                            <p class="mb-1">
+                                <span class="badge bg-primary">{{ ligne.typeBillet.nomType }}</span>
+                                × {{ ligne.quantite }}
+                            </p>
+                            <p class="mb-1">
+                                <i class="fas fa-calendar"></i> {{ ligne.typeBillet.evenement.dateEvenement|date('d/m/Y H:i') }}
+                            </p>
+                            <p class="mb-0">
+                                <i class="fas fa-map-marker-alt"></i> {{ ligne.typeBillet.evenement.lieu }}
+                            </p>
+                            <p class="text-end mb-0">
+                                <strong>{{ ligne.sousTotal|number_format(2, '.', ',') }} MAD</strong>
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

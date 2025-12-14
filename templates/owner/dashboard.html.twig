@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Owner - Qataa3.ma{% endblock %}
+
+{% block body %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1><i class="fas fa-crown text-warning"></i> Dashboard Owner (Lecture Seule)</h1>
+            <p class="text-muted">Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</p>
+        </div>
+    </div>
+
+    <!-- KPIs Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Total Billets Vendus</h6>
+                            <h2 class="mb-0">{{ total_billets_vendus }}</h2>
+                        </div>
+                        <i class="fas fa-ticket-alt fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-success shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Revenus Total (Démo)</h6>
+                            <h2 class="mb-0">{{ revenus_total|number_format(0, '.', ',') }} MAD</h2>
+                        </div>
+                        <i class="fas fa-dollar-sign fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-info shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Total Clients</h6>
+                            <h2 class="mb-0">{{ total_clients }}</h2>
+                        </div>
+                        <i class="fas fa-users fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-warning shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Événements Actifs</h6>
+                            <h2 class="mb-0">{{ evenements_actifs }}</h2>
+                        </div>
+                        <i class="fas fa-calendar-check fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-calendar fa-3x text-primary mb-3"></i>
+                    <h5>Événements</h5>
+                    <p class="text-muted">Consulter tous les événements</p>
+                    <a href="{{ path('app_owner_events') }}" class="btn btn-primary">Voir</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x text-success mb-3"></i>
+                    <h5>Clients</h5>
+                    <p class="text-muted">Consulter la liste des clients</p>
+                    <a href="{{ path('app_owner_clients') }}" class="btn btn-success">Voir</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-bar fa-3x text-info mb-3"></i>
+                    <h5>Rapports</h5>
+                    <p class="text-muted">Consulter les rapports</p>
+                    <a href="{{ path('app_owner_reports') }}" class="btn btn-info">Voir</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

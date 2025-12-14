@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Responsable - Qataa3.ma{% endblock %}
+
+{% block body %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1><i class="fas fa-chart-line"></i> Dashboard Responsable</h1>
+            <p class="text-muted">Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</p>
+        </div>
+    </div>
+
+    <!-- KPIs Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Billets Vendus Aujourd'hui</h6>
+                            <h2 class="mb-0">{{ billets_vendus }}</h2>
+                        </div>
+                        <i class="fas fa-ticket-alt fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-success shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Événements Actifs</h6>
+                            <h2 class="mb-0">{{ evenements_actifs }}</h2>
+                        </div>
+                        <i class="fas fa-calendar-check fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-info shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Utilisateurs Inscrits</h6>
+                            <h2 class="mb-0">{{ utilisateurs_inscrits }}</h2>
+                        </div>
+                        <i class="fas fa-users fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-warning shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title text-white-50">Billets Disponibles</h6>
+                            <h2 class="mb-0">{{ billets_disponibles }}</h2>
+                        </div>
+                        <i class="fas fa-box fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenus -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-dollar-sign text-success"></i> Revenus Total (Mode Démo)</h5>
+                    <h2 class="text-success">{{ revenus_total|number_format(2, '.', ',') }} MAD</h2>
+                    <small class="text-muted">Toutes les transactions sont en mode démonstration</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions Rapides -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-calendar-plus fa-3x text-primary mb-3"></i>
+                    <h5>Gestion Événements</h5>
+                    <p class="text-muted">Créer et gérer vos événements</p>
+                    <a href="{{ path('app_responsable_evenements') }}" class="btn btn-primary">
+                        <i class="fas fa-arrow-right"></i> Accéder
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x text-success mb-3"></i>
+                    <h5>Gestion Clients</h5>
+                    <p class="text-muted">Consulter et gérer les clients</p>
+                    <a href="{{ path('app_responsable_clients') }}" class="btn btn-success">
+                        <i class="fas fa-arrow-right"></i> Accéder
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-ticket-alt fa-3x text-info mb-3"></i>
+                    <h5>Gestion Billets</h5>
+                    <p class="text-muted">Gérer les types de billets</p>
+                    <a href="{{ path('app_responsable_evenements') }}" class="btn btn-info">
+                        <i class="fas fa-arrow-right"></i> Accéder
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Clients - Owner{% endblock %}
+
+{% block body %}
+<div class="container-fluid py-4">
+    <h1 class="mb-4"><i class="fas fa-users"></i> Tous les Clients (Consultation)</h1>
+
+    <div class="alert alert-warning">
+        <i class="fas fa-info-circle"></i> <strong>Mode Lecture Seule</strong> - Vous pouvez consulter les clients mais pas les modifier.
+    </div>
+
+    {% if clients is empty %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Aucun client enregistré.
+        </div>
+    {% else %}
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom Complet</th>
+                                <th>Email</th>
+                                <th>Téléphone</th>
+                                <th>Rôle</th>
+                                <th>Statut</th>
+                                <th>Date Inscription</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for client in clients %}
+                                <tr>
+                                    <td>{{ client.id }}</td>
+                                    <td><strong>{{ client.prenom }} {{ client.nom }}</strong></td>
+                                    <td>{{ client.email }}</td>
+                                    <td>{{ client.telephone ?? 'N/A' }}</td>
+                                    <td>
+                                        {% if 'ROLE_OWNER' in client.roles %}
+                                            <span class="badge bg-warning">Owner</span>
+                                        {% elseif 'ROLE_RESPONSABLE' in client.roles %}
+                                            <span class="badge bg-info">Responsable</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Client</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ client.statutCompte == 'actif' ? 'success' : 'danger' }}">
+                                            {{ client.statutCompte|upper }}
+                                        </span>
+                                    </td>
+                                    <td>{{ client.dateInscription|date('d/m/Y') }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

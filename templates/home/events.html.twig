@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Événements - Qataa3.ma{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="mb-4">
+        <i class="fas fa-calendar-alt"></i> Tous les Événements
+    </h1>
+
+    <!-- Filtres par catégorie -->
+    <div class="mb-4">
+        <a href="{{ path('app_events') }}" class="btn btn-sm {{ current_categorie is null ? 'btn-primary' : 'btn-outline-primary' }}">
+            Tous
+        </a>
+        {% for categorie in categories %}
+            <a href="{{ path('app_events', {categorie: categorie}) }}" class="btn btn-sm {{ current_categorie == categorie ? 'btn-primary' : 'btn-outline-primary' }}">
+                {{ categorie }}
+            </a>
+        {% endfor %}
+    </div>
+
+    {% if evenements is empty %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Aucun événement trouvé pour cette catégorie.
+        </div>
+    {% else %}
+        <div class="row g-4">
+            {% for evenement in evenements %}
+                <div class="col-md-4">
+                    <div class="card event-card shadow-sm h-100">
+                        {% if evenement.image %}
+                            <img src="{{ asset('images/events/' ~ evenement.image) }}" class="card-img-top" alt="{{ evenement.titre }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <div class="bg-gradient text-white d-flex align-items-center justify-content-center" style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="fas fa-calendar-alt fa-4x"></i>
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ evenement.titre }}</h5>
+                            <p class="card-text text-muted">
+                                <i class="fas fa-map-marker-alt"></i> {{ evenement.lieu }}
+                            </p>
+                            <p class="card-text">
+                                <i class="fas fa-clock"></i> {{ evenement.dateEvenement|date('d/m/Y H:i') }}
+                            </p>
+                            <span class="badge bg-primary">{{ evenement.categorie }}</span>
+                        </div>
+                        <div class="card-footer bg-white">
+                            <a href="{{ path('app_event_detail', {id: evenement.id}) }}" class="btn btn-primary w-100">
+                                <i class="fas fa-ticket-alt"></i> Voir les détails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

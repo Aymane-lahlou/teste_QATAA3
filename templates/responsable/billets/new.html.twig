@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Type de Billet{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-plus"></i> Nouveau Type de Billet</h4>
+                    <small>Pour: {{ evenement.titre }}</small>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                        <div class="mb-3">
+                            {{ form_row(form.nomType) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_row(form.prix) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_row(form.quantiteTotale) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_row(form.statut) }}
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ path('app_responsable_billets', {id: evenement.id}) }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Retour
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Créer
+                            </button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

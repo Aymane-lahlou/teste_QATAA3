@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ evenement.titre }} - Responsable{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-calendar-alt"></i> {{ evenement.titre }}</h1>
+        <div>
+            <a href="{{ path('app_responsable_evenement_edit', {id: evenement.id}) }}" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Modifier
+            </a>
+            <a href="{{ path('app_responsable_evenements') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Informations de l'événement</h5>
+                    
+                    <table class="table">
+                        <tr>
+                            <th width="30%">Titre:</th>
+                            <td>{{ evenement.titre }}</td>
+                        </tr>
+                        <tr>
+                            <th>Description:</th>
+                            <td>{{ evenement.description }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date et Heure:</th>
+                            <td>{{ evenement.dateEvenement|date('d/m/Y H:i') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Lieu:</th>
+                            <td>{{ evenement.lieu }}</td>
+                        </tr>
+                        <tr>
+                            <th>Catégorie:</th>
+                            <td><span class="badge bg-info">{{ evenement.categorie }}</span></td>
+                        </tr>
+                        <tr>
+                            <th>Statut:</th>
+                            <td>
+                                <span class="badge bg-{{ evenement.statut == 'actif' ? 'success' : 'secondary' }}">
+                                    {{ evenement.statut|upper }}
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-ticket-alt"></i> Types de Billets</h5>
+                </div>
+                <div class="card-body">
+                    {% if evenement.typeBillets is empty %}
+                        <p class="text-muted">Aucun type de billet créé pour cet événement.</p>
+                    {% else %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Prix</th>
+                                    <th>Quantité Totale</th>
+                                    <th>Restants</th>
+                                    <th>Vendus</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for billet in evenement.typeBillets %}
+                                    <tr>
+                                        <td><strong>{{ billet.nomType }}</strong></td>
+                                        <td>{{ billet.prix }} MAD</td>
+                                        <td>{{ billet.quantiteTotale }}</td>
+                                        <td>{{ billet.quantiteRestante }}</td>
+                                        <td>{{ billet.quantiteTotale - billet.quantiteRestante }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ billet.statut == 'actif' ? 'success' : 'secondary' }}">
+                                                {{ billet.statut }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                    
+                    <a href="{{ path('app_responsable_billets', {id: evenement.id}) }}" class="btn btn-primary">
+                        <i class="fas fa-cog"></i> Gérer les billets
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow mb-3">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Billets Vendus</h6>
+                    <h2 class="text-primary">
+                        {% set total_vendus = 0 %}
+                        {% for billet in evenement.typeBillets %}
+                            {% set total_vendus = total_vendus + (billet.quantiteTotale - billet.quantiteRestante) %}
+                        {% endfor %}
+                        {{ total_vendus }}
+                    </h2>
+                </div>
+            </div>
+
+            <div class="card shadow mb-3">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Billets Restants</h6>
+                    <h2 class="text-warning">
+                        {% set total_restants = 0 %}
+                        {% for billet in evenement.typeBillets %}
+                            {% set total_restants = total_restants + billet.quantiteRestante %}
+                        {% endfor %}
+                        {{ total_restants }}
+                    </h2>
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Revenus Générés</h6>
+                    <h2 class="text-success">
+                        {% set revenus = 0 %}
+                        {% for billet in evenement.typeBillets %}
+                            {% set revenus = revenus + ((billet.quantiteTotale - billet.quantiteRestante) * billet.prix) %}
+                        {% endfor %}
+                        {{ revenus|number_format(2, '.', ',') }} MAD
+                    </h2>
+                    <small class="text-muted">(Mode Démo)</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

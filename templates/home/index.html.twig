@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Qataa3.ma{% endblock %}
+
+{% block body %}
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-3">Bienvenue sur Qataa3.ma</h1>
+        <p class="lead mb-4">Découvrez et réservez vos billets pour les meilleurs événements au Maroc</p>
+        <a href="{{ path('app_events') }}" class="btn btn-light btn-lg">
+            <i class="fas fa-calendar-alt"></i> Voir les événements
+        </a>
+    </div>
+</section>
+
+<!-- Events Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">
+            <i class="fas fa-star"></i> Événements à venir
+        </h2>
+        
+        {% if evenements is empty %}
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle"></i> Aucun événement disponible pour le moment.
+            </div>
+        {% else %}
+            <div class="row g-4">
+                {% for evenement in evenements %}
+                    <div class="col-md-4">
+                        <div class="card event-card shadow-sm h-100">
+                            {% if evenement.image %}
+                                <img src="{{ asset('images/events/' ~ evenement.image) }}" class="card-img-top" alt="{{ evenement.titre }}" style="height: 200px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-gradient text-white d-flex align-items-center justify-content-center" style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                    <i class="fas fa-calendar-alt fa-4x"></i>
+                                </div>
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ evenement.titre }}</h5>
+                                <p class="card-text text-muted">
+                                    <i class="fas fa-map-marker-alt"></i> {{ evenement.lieu }}
+                                </p>
+                                <p class="card-text">
+                                    <i class="fas fa-clock"></i> {{ evenement.dateEvenement|date('d/m/Y H:i') }}
+                                </p>
+                                <span class="badge bg-primary">{{ evenement.categorie }}</span>
+                            </div>
+                            <div class="card-footer bg-white">
+                                <a href="{{ path('app_event_detail', {id: evenement.id}) }}" class="btn btn-primary w-100">
+                                    <i class="fas fa-ticket-alt"></i> Voir les détails
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if evenements|length > 6 %}
+            <div class="text-center mt-5">
+                <a href="{{ path('app_events') }}" class="btn btn-outline-primary btn-lg">
+                    Voir tous les événements <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-4">
+                <div class="p-4">
+                    <i class="fas fa-ticket-alt fa-3x text-primary mb-3"></i>
+                    <h4>Réservation Facile</h4>
+                    <p class="text-muted">Réservez vos billets en quelques clics</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4">
+                    <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+                    <h4>Paiement Sécurisé</h4>
+                    <p class="text-muted">Vos transactions sont protégées</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4">
+                    <i class="fas fa-qrcode fa-3x text-primary mb-3"></i>
+                    <h4>Billets Électroniques</h4>
+                    <p class="text-muted">Recevez vos billets avec QR code</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

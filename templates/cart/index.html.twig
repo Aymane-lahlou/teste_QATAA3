@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Panier - Qataa3.ma{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="mb-4"><i class="fas fa-shopping-cart"></i> Mon Panier</h1>
+
+    {% if cart_items is empty %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Votre panier est vide.
+        </div>
+        <a href="{{ path('app_events') }}" class="btn btn-primary">
+            <i class="fas fa-arrow-left"></i> Retour aux événements
+        </a>
+    {% else %}
+        <div class="row">
+            <div class="col-md-8">
+                {% for item in cart_items %}
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h5>{{ item.billet.evenement.titre }}</h5>
+                                    <p class="text-muted mb-1">
+                                        <span class="badge bg-primary">{{ item.billet.nomType }}</span>
+                                    </p>
+                                    <p class="mb-0">
+                                        <i class="fas fa-calendar"></i> {{ item.billet.evenement.dateEvenement|date('d/m/Y H:i') }}
+                                    </p>
+                                    <p class="mb-0">
+                                        <i class="fas fa-map-marker-alt"></i> {{ item.billet.evenement.lieu }}
+                                    </p>
+                                </div>
+                                <div class="col-md-3">
+                                    <form action="{{ path('app_cart_update', {id: item.billet.id}) }}" method="post" class="d-flex align-items-center">
+                                        <label class="me-2 mb-0">Quantité:</label>
+                                        <input type="number" name="quantite" value="{{ item.quantite }}" min="1" max="{{ item.billet.quantiteRestante }}" class="form-control form-control-sm w-50" onchange="this.form.submit()">
+                                    </form>
+                                    <small class="text-muted">Max: {{ item.billet.quantiteRestante }}</small>
+                                </div>
+                                <div class="col-md-2 text-end">
+                                    <p class="h5 mb-1">{{ item.sousTotal|number_format(2, '.', ',') }} MAD</p>
+                                    <small class="text-muted">{{ item.billet.prix }} MAD / unité</small>
+                                </div>
+                                <div class="col-md-1 text-end">
+                                    <a href="{{ path('app_cart_remove', {id: item.billet.id}) }}" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <a href="{{ path('app_cart_clear') }}" class="btn btn-outline-danger">
+                    <i class="fas fa-trash"></i> Vider le panier
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow sticky-top" style="top: 20px;">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-receipt"></i> Récapitulatif</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Sous-total:</span>
+                            <strong>{{ total|number_format(2, '.', ',') }} MAD</strong>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-3">
+                            <strong>Total:</strong>
+                            <strong class="text-primary h4">{{ total|number_format(2, '.', ',') }} MAD</strong>
+                        </div>
+
+                        {% if app.user %}
+                            <a href="{{ path('app_checkout') }}" class="btn btn-primary w-100 mb-2">
+                                <i class="fas fa-credit-card"></i> Procéder au paiement
+                            </a>
+                        {% else %}
+                            <p class="text-muted text-center mb-2">Vous devez être connecté pour finaliser votre achat</p>
+                            <a href="{{ path('app_login') }}" class="btn btn-primary w-100 mb-2">
+                                <i class="fas fa-sign-in-alt"></i> Se connecter
+                            </a>
+                            <a href="{{ path('app_register') }}" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-user-plus"></i> Créer un compte
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

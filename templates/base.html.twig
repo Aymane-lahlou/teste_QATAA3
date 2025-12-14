@@ -1,17 +1,161 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Qataa3.ma{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    {% block stylesheets %}
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #0d6efd !important;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+        }
+        .event-card {
+            transition: transform 0.3s;
+        }
+        .event-card:hover {
+            transform: translateY(-5px);
+        }
+        footer {
+            background-color: #212529;
+            color: white;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+    </style>
+    {% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{{ path('app_home') }}">
+                <i class="fas fa-ticket-alt"></i> Qataa3.ma
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_events') }}">Événements</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_contact') }}">Contact</a>
+                    </li>
+                    
+                    <!-- PANIER - AJOUTÉ ICI -->
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="{{ path('app_cart') }}">
+                            <i class="fas fa-shopping-cart"></i> Panier
+                            {% if app.session.get('cart')|default([])|length > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ app.session.get('cart')|default([])|reduce((carry, quantity) => carry + quantity, 0) }}
+                                </span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    
+                    {% if app.user %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle"></i> {{ app.user.prenom }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                {% if is_granted('ROLE_OWNER') %}
+                                    <li><a class="dropdown-item" href="{{ path('app_owner_dashboard') }}">Dashboard Owner</a></li>
+                                {% elseif is_granted('ROLE_RESPONSABLE') %}
+                                    <li><a class="dropdown-item" href="{{ path('app_responsable_dashboard') }}">Dashboard Responsable</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item" href="{{ path('app_client_dashboard') }}">Mon Espace</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_client_tickets') }}">Mes Tickets</a></li>
+                                    <li><a class="dropdown-item" href="{{ path('app_client_recus') }}">Mes Reçus</a></li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-primary btn-sm ms-2" href="{{ path('app_register') }}">Inscription</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
+    <!-- Flash Messages -->
+    <div class="container mt-3">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <!-- Main Content -->
+    <main>
         {% block body %}{% endblock %}
-    </body>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-ticket-alt"></i> Qataa3.ma</h5>
+                    <p>Votre plateforme de billetterie événementielle au Maroc.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Liens Rapides</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ path('app_events') }}" class="text-white text-decoration-none">Événements</a></li>
+                        <li><a href="{{ path('app_contact') }}" class="text-white text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Suivez-nous</h5>
+                    <div>
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-2x"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-twitter fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="bg-light">
+            <div class="text-center">
+                <p>&copy; 2024 Qataa3.ma - Tous droits réservés</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block javascripts %}{% endblock %}
+</body>
 </html>

@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rapports - Owner{% endblock %}
+
+{% block body %}
+<div class="container-fluid py-4">
+    <h1 class="mb-4"><i class="fas fa-chart-bar"></i> Rapports et Statistiques (Mode Démo)</h1>
+
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> Toutes les données financières sont en mode démonstration.
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <i class="fas fa-calendar-check fa-3x text-primary mb-3"></i>
+                    <h6 class="text-muted">Total Événements</h6>
+                    <h2>{{ revenue_by_period|length }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <i class="fas fa-ticket-alt fa-3x text-success mb-3"></i>
+                    <h6 class="text-muted">Billets Vendus</h6>
+                    <h2>-</h2>
+                    <small class="text-muted">Démo</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <i class="fas fa-dollar-sign fa-3x text-warning mb-3"></i>
+                    <h6 class="text-muted">Revenus Total</h6>
+                    <h2>-</h2>
+                    <small class="text-muted">Démo</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <i class="fas fa-users fa-3x text-info mb-3"></i>
+                    <h6 class="text-muted">Clients Actifs</h6>
+                    <h2>-</h2>
+                    <small class="text-muted">Démo</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-chart-line"></i> Évolution des Ventes (30 derniers jours)</h5>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <i class="fas fa-info-circle"></i> Graphiques disponibles en version complète
+            </div>
+            <p class="text-muted">Les rapports détaillés et graphiques seront disponibles dans une prochaine version.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

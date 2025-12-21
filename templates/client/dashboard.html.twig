@@ -4,84 +4,191 @@
 
 {% block body %}
 <style>
-    /* Fond global harmonisé */
-    body { background-color: #f1f5f9; }
+    body { 
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
 
     /* Header Welcome */
     .dashboard-header {
         background: white;
-        border-radius: 20px;
-        padding: 30px;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        border-radius: 24px;
+        padding: 35px 40px;
+        margin-bottom: 35px;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border: 1px solid #e2e8f0;
+        border: 1px solid rgba(255,255,255,0.8);
+        animation: slideDown 0.5s ease;
     }
 
-    .welcome-text h1 { font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 0; }
-    .welcome-text p { color: #64748b; margin: 5px 0 0 0; font-size: 0.95rem; }
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .welcome-text h1 { 
+        font-size: 1.75rem; 
+        font-weight: 800; 
+        color: #1e293b; 
+        margin: 0 0 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .welcome-text p { 
+        color: #64748b; 
+        margin: 0; 
+        font-size: 0.98rem; 
+    }
+
+    .date-badge {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border: 2px solid #e2e8f0;
+        padding: 12px 20px;
+        border-radius: 50px;
+        font-weight: 600;
+        color: #475569;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
 
     /* Cartes Dashboard */
     .dashboard-card {
         background: white;
         border-radius: 24px;
-        padding: 40px 30px;
+        padding: 45px 35px;
         text-align: center;
-        transition: all 0.3s ease;
-        border: 1px solid #e2e8f0;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(255,255,255,0.8);
+        box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1);
         height: 100%;
         position: relative;
         overflow: hidden;
+        animation: fadeInUp 0.6s ease backwards;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     
+    .dashboard-card:nth-child(1) { animation-delay: 0.1s; }
+    .dashboard-card:nth-child(2) { animation-delay: 0.2s; }
+    .dashboard-card:nth-child(3) { animation-delay: 0.3s; }
+
     .dashboard-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.15);
-        border-color: #bfdbfe;
+        transform: translateY(-10px) scale(1.03);
+        box-shadow: 0 25px 50px -10px rgba(0,0,0,0.15);
     }
 
     /* Icônes dans des bulles */
     .icon-bubble {
-        width: 80px; height: 80px;
+        width: 90px; 
+        height: 90px;
         border-radius: 50%;
         display: inline-flex;
-        align-items: center; justify-content: center;
-        font-size: 2rem;
-        margin-bottom: 25px;
-        transition: transform 0.3s;
+        align-items: center; 
+        justify-content: center;
+        font-size: 2.2rem;
+        margin-bottom: 28px;
+        transition: transform 0.4s;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     }
-    .dashboard-card:hover .icon-bubble { transform: scale(1.1) rotate(5deg); }
+    .dashboard-card:hover .icon-bubble { 
+        transform: scale(1.15) rotate(-5deg); 
+    }
 
     /* Couleurs spécifiques par carte */
-    .card-profile .icon-bubble { background: #eff6ff; color: #2563eb; }
-    .card-tickets .icon-bubble { background: #ecfdf5; color: #059669; }
-    .card-receipts .icon-bubble { background: #f0f9ff; color: #0891b2; }
-
-    .card-title { font-weight: 700; color: #1e293b; font-size: 1.25rem; margin-bottom: 10px; }
-    .card-text { color: #64748b; font-size: 0.95rem; margin-bottom: 30px; min-height: 45px; }
-
-    /* Boutons Ghost */
-    .btn-ghost {
-        padding: 12px 25px;
-        border-radius: 12px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.2s;
-        display: inline-block;
-        border: 2px solid transparent;
+    .card-profile .icon-bubble { 
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); 
+        color: #2563eb; 
+        border: 2px solid #bfdbfe;
+    }
+    .card-tickets .icon-bubble { 
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); 
+        color: #059669; 
+        border: 2px solid #a7f3d0;
+    }
+    .card-receipts .icon-bubble { 
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); 
+        color: #d97706; 
+        border: 2px solid #fcd34d;
     }
 
-    .card-profile .btn-ghost { background: #eff6ff; color: #2563eb; }
-    .card-profile .btn-ghost:hover { background: #2563eb; color: white; }
+    .card-title { 
+        font-weight: 800; 
+        color: #1e293b; 
+        font-size: 1.35rem; 
+        margin-bottom: 15px; 
+    }
+    .card-text { 
+        color: #64748b; 
+        font-size: 0.98rem; 
+        margin-bottom: 32px; 
+        min-height: 50px; 
+        line-height: 1.6;
+    }
 
-    .card-tickets .btn-ghost { background: #ecfdf5; color: #059669; }
-    .card-tickets .btn-ghost:hover { background: #059669; color: white; }
+    /* Boutons Modernes */
+    .btn-action {
+        padding: 14px 28px;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: none;
+        font-size: 0.95rem;
+    }
 
-    .card-receipts .btn-ghost { background: #f0f9ff; color: #0891b2; }
-    .card-receipts .btn-ghost:hover { background: #0891b2; color: white; }
+    .card-profile .btn-action { 
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+    }
+    .card-profile .btn-action:hover { 
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        color: white;
+    }
 
+    .card-tickets .btn-action { 
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+    }
+    .card-tickets .btn-action:hover { 
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(5, 150, 105, 0.4);
+        color: white;
+    }
+
+    .card-receipts .btn-action { 
+        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+    }
+    .card-receipts .btn-action:hover { 
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(217, 119, 6, 0.4);
+        color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .dashboard-header {
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+        }
+        .date-badge { margin-top: 10px; }
+    }
 </style>
 
 <div class="container py-5">
@@ -89,17 +196,21 @@
     <!-- Header Bienvenue -->
     <div class="dashboard-header">
         <div class="welcome-text">
-            <h1><i class="fas fa-hand-sparkles text-warning me-2"></i>Bonjour, {{ app.user.prenom }}</h1>
+            <h1>
+                <i class="fas fa-hand-sparkles" style="color: #f59e0b;"></i>
+                Bonjour, {{ app.user.prenom }}
+            </h1>
             <p>Ravi de vous revoir sur votre espace personnel Qataa3.ma</p>
         </div>
         <div class="d-none d-md-block">
-            <span class="badge bg-light text-dark border px-3 py-2 rounded-pill">
-                <i class="far fa-calendar-alt me-2"></i> {{ "now"|date("d F Y") }}
+            <span class="date-badge">
+                <i class="far fa-calendar-alt"></i> 
+                {{ "now"|date("d F Y") }}
             </span>
         </div>
     </div>
 
-    <!-- Grille de Cartes -->
+    <!-- Grille de Cartes (3 colonnes) -->
     <div class="row g-4">
         <!-- Carte Profil -->
         <div class="col-md-4">
@@ -109,8 +220,8 @@
                 </div>
                 <h3 class="card-title">Mon Profil</h3>
                 <p class="card-text">Gérez vos informations personnelles et sécurisez votre compte.</p>
-                <a href="{{ path('app_client_profile') }}" class="btn-ghost">
-                    Gérer mon profil <i class="fas fa-arrow-right ms-2"></i>
+                <a href="{{ path('app_client_profile') }}" class="btn-action">
+                    Gérer mon profil <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
         </div>
@@ -123,8 +234,8 @@
                 </div>
                 <h3 class="card-title">Mes Tickets</h3>
                 <p class="card-text">Retrouvez tous vos billets électroniques et codes QR.</p>
-                <a href="{{ path('app_client_tickets') }}" class="btn-ghost">
-                    Voir mes tickets <i class="fas fa-arrow-right ms-2"></i>
+                <a href="{{ path('app_client_tickets') }}" class="btn-action">
+                    Voir mes tickets <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
         </div>
@@ -137,8 +248,8 @@
                 </div>
                 <h3 class="card-title">Mes Reçus</h3>
                 <p class="card-text">Historique de vos paiements et téléchargement des factures.</p>
-                <a href="{{ path('app_client_recus') }}" class="btn-ghost">
-                    Consulter l'historique <i class="fas fa-arrow-right ms-2"></i>
+                <a href="{{ path('app_client_recus') }}" class="btn-action">
+                    Consulter <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
         </div>

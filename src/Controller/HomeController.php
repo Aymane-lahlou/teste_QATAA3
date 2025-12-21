@@ -63,4 +63,11 @@ class HomeController extends AbstractController
     {
         return $this->render('home/contact.html.twig');
     }
+    // src/Controller/HomeController.php
+#[Route('/faq', name: 'app_faq')]
+public function faq(): Response
+{
+    return $this->render('home/faq.html.twig');
+}
+
 }

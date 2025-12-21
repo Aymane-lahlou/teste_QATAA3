@@ -4,130 +4,456 @@
     <meta charset="UTF-8">
     <title>Reçu {{ recu.numeroRecu }}</title>
     <style>
+        @page { margin: 0; }
+        
         body {
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-            margin: 40px;
+            font-family: 'Helvetica', Arial, sans-serif;
+            font-size: 11px;
+            margin: 0;
+            padding: 0;
+            color: #1e293b;
+            background: #ffffff;
         }
+
+        /* Header Premium */
         .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 45px 50px;
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #0d6efd;
-            padding-bottom: 20px;
+            position: relative;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: white;
+            border-radius: 20px 20px 0 0;
         }
         .header h1 {
-            color: #0d6efd;
+            margin: 0 0 10px 0;
+            font-size: 36px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+        .header p {
             margin: 0;
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
-        .info-section {
+
+        /* Container */
+        .container {
+            padding: 30px 50px 50px;
+        }
+
+        /* Badge Reçu */
+        .receipt-badge {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            margin: 0 auto 35px;
+            padding: 20px 35px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            max-width: 420px;
+            border: 3px solid #e2e8f0;
+        }
+        .receipt-number {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+        .receipt-id {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: #667eea;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
+        /* Section Title */
+        .section-title {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 14px 22px;
+            margin: 30px 0 20px;
+            border-left: 6px solid #667eea;
+            font-size: 13px;
+            font-weight: 800;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: table;
+            width: 100%;
             margin-bottom: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
         }
-        .info-section h3 {
-            background-color: #f8f9fa;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-left: 4px solid #0d6efd;
+        .info-row {
+            display: table-row;
         }
+        .info-label {
+            display: table-cell;
+            padding: 10px 20px 10px 0;
+            color: #64748b;
+            font-weight: 700;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 40%;
+        }
+        .info-value {
+            display: table-cell;
+            padding: 10px 0;
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        /* Badge Success */
+        .badge-success {
+            display: inline-block;
+            padding: 7px 16px;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            color: #059669;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 800;
+            border: 2px solid #a7f3d0;
+        }
+
+        /* Table */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin: 20px 0;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
         }
         table th {
-            background-color: #0d6efd;
-            color: white;
-            padding: 10px;
+            padding: 16px 14px;
             text-align: left;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
         }
         table td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
+            padding: 14px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 11px;
+            color: #334155;
+            font-weight: 600;
         }
-        .total-section {
+        table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        table tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        table tbody tr:hover {
+            background: #f1f5f9;
+        }
+
+        /* Total Box */
+        .total-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+            border: 3px solid #667eea;
+            border-radius: 16px;
+            padding: 25px 30px;
+            margin: 30px 0;
             text-align: right;
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f8f9fa;
         }
-        .footer {
-            margin-top: 50px;
+        .total-label {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        .total-amount {
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: #667eea;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
+        /* Ticket Card */
+        .ticket-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+        .ticket-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+        .ticket-header {
+            display: table;
+            width: 100%;
+            margin-bottom: 0;
+            padding-left: 18px;
+        }
+        .ticket-main {
+            display: table-row;
+        }
+        .ticket-details {
+            display: table-cell;
+            vertical-align: middle;
+            width: 60%;
+            padding-right: 20px;
+        }
+        .ticket-qr-zone {
+            display: table-cell;
+            vertical-align: middle;
             text-align: center;
-            font-size: 10px;
-            color: #666;
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
+            width: 40%;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
         }
-        .badge {
+        .ticket-title {
+            font-size: 14px;
+            font-weight: 900;
+            color: #0f172a;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        .ticket-meta {
+            font-size: 10px;
+            color: #64748b;
+            margin: 5px 0;
+            font-weight: 600;
+            display: block;
+        }
+        .ticket-code-display {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            font-weight: 800;
+            color: #475569;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            margin-top: 10px;
             display: inline-block;
-            padding: 5px 10px;
-            background-color: #28a745;
-            color: white;
-            border-radius: 3px;
+            border: 2px solid #e2e8f0;
+            letter-spacing: 0.5px;
+        }
+        .qr-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Info Note */
+        .info-note {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 5px solid #f59e0b;
+            padding: 18px 22px;
+            margin: 25px 0;
+            border-radius: 0 12px 12px 0;
+            border: 2px solid #fcd34d;
+            border-left: 5px solid #f59e0b;
+        }
+        .info-note p {
+            margin: 6px 0;
+            font-size: 10px;
+            color: #92400e;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+        .info-note strong {
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 45px;
+            padding-top: 30px;
+            border-top: 3px solid #e2e8f0;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 9px;
+            background: #f8fafc;
+            margin-left: -50px;
+            margin-right: -50px;
+            padding-left: 50px;
+            padding-right: 50px;
+            padding-bottom: 30px;
+        }
+        .footer-brand {
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: #667eea;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .footer p {
+            margin: 5px 0;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
+    
+    <!-- Header -->
     <div class="header">
         <h1>🎫 Qataa3.ma</h1>
-        <p>Plateforme de Billetterie Événementielle</p>
+        <p>Plateforme de Billetterie Événementielle Marocaine</p>
     </div>
 
-    <div class="info-section">
-        <h3>Informations du Reçu</h3>
-        <p><strong>Numéro de reçu :</strong> {{ recu.numeroRecu }}</p>
-        <p><strong>Date d'émission :</strong> {{ recu.dateRecu|date('d/m/Y à H:i') }}</p>
-        <p><strong>Statut :</strong> <span class="badge">Payé (Mode Démonstration)</span></p>
-    </div>
+    <div class="container">
+        
+        <!-- Badge Numéro -->
+        <div class="receipt-badge">
+            <div class="receipt-number">Reçu n°</div>
+            <div class="receipt-id">{{ recu.numeroRecu }}</div>
+        </div>
 
-    <div class="info-section">
-        <h3>Informations Client</h3>
-        <p><strong>Nom :</strong> {{ commande.client.prenom }} {{ commande.client.nom }}</p>
-        <p><strong>Email :</strong> {{ commande.emailAcheteur }}</p>
-    </div>
+        <!-- Infos Reçu -->
+        <h3 class="section-title">📋 Informations du Reçu</h3>
+        <div class="info-grid">
+            <div class="info-row">
+                <div class="info-label">📅 Date d'émission</div>
+                <div class="info-value">{{ recu.dateRecu|date('d/m/Y à H:i') }}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">💳 Statut</div>
+                <div class="info-value"><span class="badge-success">✓ PAYÉ</span></div>
+            </div>
+        </div>
 
-    <div class="info-section">
-        <h3>Détails de la Commande</h3>
+        <!-- Infos Client -->
+        <h3 class="section-title">👤 Informations Client</h3>
+        <div class="info-grid">
+            <div class="info-row">
+                <div class="info-label">Nom complet</div>
+                <div class="info-value">{{ commande.client.prenom }} {{ commande.client.nom }}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Email</div>
+                <div class="info-value">{{ commande.emailAcheteur }}</div>
+            </div>
+        </div>
+
+        <!-- Détails Commande -->
+        <h3 class="section-title">🛒 Détails de la Commande</h3>
         <table>
             <thead>
                 <tr>
                     <th>Événement</th>
-                    <th>Type de Billet</th>
-                    <th>Quantité</th>
-                    <th>Prix Unitaire</th>
-                    <th>Sous-total</th>
+                    <th>Type</th>
+                    <th style="text-align:center;">Qté</th>
+                    <th style="text-align:right;">P.U.</th>
+                    <th style="text-align:right;">Total</th>
                 </tr>
             </thead>
             <tbody>
                 {% for ligne in commande.ligneCommandes %}
                     <tr>
-                        <td>{{ ligne.typeBillet.evenement.titre }}</td>
+                        <td><strong>{{ ligne.typeBillet.evenement.titre }}</strong></td>
                         <td>{{ ligne.typeBillet.nomType }}</td>
-                        <td>{{ ligne.quantite }}</td>
-                        <td>{{ ligne.prixUnitaire|number_format(2, ',', ' ') }} MAD</td>
-                        <td>{{ ligne.sousTotal|number_format(2, ',', ' ') }} MAD</td>
+                        <td style="text-align:center;"><strong>{{ ligne.quantite }}</strong></td>
+                        <td style="text-align:right;">{{ ligne.prixUnitaire|number_format(2, ',', ' ') }} MAD</td>
+                        <td style="text-align:right;"><strong>{{ ligne.sousTotal|number_format(2, ',', ' ') }} MAD</strong></td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+
+        <!-- Total -->
+        <div class="total-box">
+            <div class="total-label">MONTANT TOTAL</div>
+            <div class="total-amount">{{ recu.montantTotal|number_format(2, ',', ' ') }} MAD</div>
+        </div>
+
+        <!-- Tickets -->
+        {% if ticketsWithQR is defined and ticketsWithQR is not empty %}
+            <h3 class="section-title">🎟️ Vos Tickets d'Accès</h3>
+
+            {% for item in ticketsWithQR %}
+                {% set ticket = item.ticket %}
+                <div class="ticket-card">
+                    <div class="ticket-header">
+                        <div class="ticket-main">
+                            <div class="ticket-details">
+                                <div class="ticket-title">{{ ticket.ligneCommande.typeBillet.evenement.titre }}</div>
+                                <span class="ticket-meta">📍 {{ ticket.ligneCommande.typeBillet.evenement.lieu }}</span>
+                                <span class="ticket-meta">🗓️ {{ ticket.ligneCommande.typeBillet.evenement.dateEvenement|date('d/m/Y à H:i') }}</span>
+                                <span class="ticket-meta">🎫 {{ ticket.ligneCommande.typeBillet.nomType }}</span>
+                            </div>
+                            <div class="ticket-qr-zone">
+                                <img src="{{ item.qrCode }}" alt="QR" class="qr-image">
+                                <div class="ticket-code-display">{{ ticket.codeTicket }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Note -->
+        <div class="info-note">
+            <p><strong>⚠️ Important :</strong></p>
+            <p>• Présentez ce ticket (imprimé ou sur mobile) à l'entrée de l'événement</p>
+            <p>• Chaque code QR est unique et ne peut être utilisé qu'une seule fois</p>
+            <p>• Conservez ce reçu comme preuve d'achat officielle</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-brand">Qataa3.ma</div>
+            <p>📧 contact@qataa3.ma | 📱 +212 6 12 34 56 78</p>
+            <p>Document généré le {{ "now"|date('d/m/Y à H:i') }}</p>
+            <p style="margin-top:12px;">© 2025 Qataa3.ma - Tous droits réservés</p>
+        </div>
+
     </div>
 
-    <div class="total-section">
-        <p>MONTANT TOTAL : {{ recu.montantTotal|number_format(2, ',', ' ') }} MAD</p>
-    </div>
-
-    <div class="info-section">
-        <h3>Informations Importantes</h3>
-        <p>✓ Ce reçu a été généré en mode démonstration.</p>
-        <p>✓ Aucun paiement réel n'a été effectué.</p>
-        <p>✓ Vos tickets sont disponibles dans votre espace client.</p>
-    </div>
-
-    <div class="footer">
-        <p>Qataa3.ma - Plateforme de Billetterie Événementielle</p>
-        <p>Email: contact@qataa3.ma | Tél: +212 6 12 34 56 78</p>
-        <p>Document généré le {{ "now"|date('d/m/Y à H:i') }}</p>
-    </div>
 </body>
 </html>

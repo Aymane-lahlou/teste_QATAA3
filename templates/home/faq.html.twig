@@ -1,0 +1,107 @@
+{# templates/pages/faq.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}FAQ - Qataa3.ma{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="mb-4 text-center">
+                <h1 class="h3 fw-bold mb-2">FAQ</h1>
+                <p class="text-muted mb-0">Questions fréquentes sur la billetterie Qataa3.ma</p>
+            </div>
+
+            <div class="accordion" id="faqAccordion">
+
+                {# 1. Achat & paiement #}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq-1-heading">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-1" aria-expanded="true" aria-controls="faq-1">
+                            Comment acheter un billet sur Qataa3.ma ?
+                        </button>
+                    </h2>
+                    <div id="faq-1" class="accordion-collapse collapse show" aria-labelledby="faq-1-heading"
+                         data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Sélectionnez un événement, choisissez le type de billet et la quantité, puis validez votre panier.
+                            Le paiement se fait en mode démonstration et une commande est créée avec vos tickets associés. [file:26]
+                        </div>
+                    </div>
+                </div>
+
+                {# 2. Mode démonstration #}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq-2-heading">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-2" aria-expanded="false" aria-controls="faq-2">
+                            Le paiement est-il réel ?
+                        </button>
+                    </h2>
+                    <div id="faq-2" class="accordion-collapse collapse" aria-labelledby="faq-2-heading"
+                         data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Non, tous les paiements sont effectués en <strong>mode démonstration</strong> : aucune carte réelle
+                            n’est débitée, mais le système génère une commande, des tickets et un reçu PDF comme dans un vrai parcours. [file:26]
+                        </div>
+                    </div>
+                </div>
+
+                {# 3. Tickets & QR Code #}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq-3-heading">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-3" aria-expanded="false" aria-controls="faq-3">
+                            Où trouver mes tickets et leurs QR Codes ?
+                        </button>
+                    </h2>
+                    <div id="faq-3" class="accordion-collapse collapse" aria-labelledby="faq-3-heading"
+                         data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Après confirmation de la commande, vos tickets sont disponibles dans la rubrique
+                            <em>“Mes tickets”</em> de votre espace client, avec un QR Code unique pour chaque ticket. [file:26]
+                        </div>
+                    </div>
+                </div>
+
+                {# 4. Reçus PDF #}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq-4-heading">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-4" aria-expanded="false" aria-controls="faq-4">
+                            Comment télécharger mon reçu de paiement ?
+                        </button>
+                    </h2>
+                    <div id="faq-4" class="accordion-collapse collapse" aria-labelledby="faq-4-heading"
+                         data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Un reçu PDF est généré automatiquement pour chaque commande et accessible dans la section
+                            <em>“Mes reçus”</em> de votre espace client, avec la mention du mode démonstration. [file:26]
+                        </div>
+                    </div>
+                </div>
+
+                {# 5. Contrôle à l’entrée #}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq-5-heading">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq-5" aria-expanded="false" aria-controls="faq-5">
+                            Comment les tickets sont-ils contrôlés le jour de l’événement ?
+                        </button>
+                    </h2>
+                    <div id="faq-5" class="accordion-collapse collapse" aria-labelledby="faq-5-heading"
+                         data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Le responsable de l’événement scanne le QR Code à l’entrée ; un ticket déjà utilisé ne peut
+                            plus être validé une seconde fois. [file:26]
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

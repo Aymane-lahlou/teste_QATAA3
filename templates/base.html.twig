@@ -466,7 +466,6 @@
                                     <a href="{{ path('app_client_profile') }}" class="dropdown-item-modern"><i class="fas fa-user"></i> Mon Profil</a>
                                     <a href="{{ path('app_client_tickets') }}" class="dropdown-item-modern"><i class="fas fa-ticket-alt"></i> Mes Tickets</a>
                                     <a href="{{ path('app_client_recus') }}" class="dropdown-item-modern"><i class="fas fa-receipt"></i> Mes Reçus</a>
-                                    <a href="#" class="dropdown-item-modern"><i class="fas fa-heart"></i> Favoris</a>
                                 {% endif %}
                                 <div style="height: 1px; background: #f1f5f9; margin: 0.5rem 0;"></div>
                                 <a href="{{ path('app_logout') }}" class="dropdown-item-modern" style="color: #ef4444;">
@@ -539,7 +538,7 @@
                     <ul class="footer-links">
                         <li><a href="#">Qui sommes-nous ?</a></li>
                         <li><a href="{{ path('app_contact') }}">Contactez-nous</a></li>
-                        <li><a href="#">F.A.Q</a></li>
+                        <li><a href="{{ path('app_faq') }}">F.A.Q</a></li>
                         <li><a href="#">Blog</a></li>
                     </ul>
                 </div>

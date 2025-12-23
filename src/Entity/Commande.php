@@ -44,10 +44,9 @@ class Commande
     public function __construct()
     {
         $this->ligneCommandes = new ArrayCollection();
-        $this->dateCommande = new \DateTimeImmutable();
+        $this->dateCommande   = new \DateTimeImmutable();
     }
 
-    // Getters et Setters
     public function getId(): ?int
     {
         return $this->id;
@@ -161,18 +160,5 @@ class Commande
         $this->recu = $recu;
         return $this;
     }
-    public function getStatsByEvent(): array
-{
-    return $this->createQueryBuilder('l')
-        ->select('e.id AS event_id, e.titre AS event_title')
-        ->addSelect('SUM(l.quantite) AS billets_vendus')
-        ->addSelect('SUM(l.quantite * l.prixUnitaire) AS revenus')
-        ->join('l.evenement', 'e')
-        ->groupBy('e.id')
-        ->orderBy('revenus', 'DESC')
-        ->getQuery()
-        ->getArrayResult();
-}
-
-
+    
 }

@@ -139,7 +139,7 @@
                             <th>Catégorie</th>
                             <th>Statut</th>
                             <th class="text-number">Billets vendus</th>
-                            <th class="text-number">Revenus (Démo)</th>
+                            <th class="text-number">Revenus</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -205,12 +205,8 @@
                                 </td>
 
                                 <td class="text-number">
-                                    {% if attribute(evenement, 'revenuDemo') is defined %}
-                                        {% set revenu = attribute(evenement, 'revenuDemo') %}
-                                    {% else %}
-                                        {% set revenu = 0 %}
-                                    {% endif %}
-                                    {{ revenu|number_format(2, '.', ' ') }} MAD
+                                    {% set revenu = revenue_by_event[evenement.id]|default(0) %}
+                                     {{ revenu|number_format(2, '.', ' ') }} MAD
                                 </td>
                             </tr>
                         {% endfor %}

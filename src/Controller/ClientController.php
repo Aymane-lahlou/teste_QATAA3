@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Client;
 use App\Repository\TicketRepository;
 use App\Repository\RecuRepository;
 use App\Service\QRCodeService;
@@ -17,6 +18,7 @@ class ClientController extends AbstractController
     #[Route('/dashboard', name: 'app_client_dashboard')]
     public function dashboard(): Response
     {
+        /** @var Client $user */
         $user = $this->getUser();
 
         return $this->render('client/dashboard.html.twig', [
@@ -27,6 +29,7 @@ class ClientController extends AbstractController
     #[Route('/profile', name: 'app_client_profile')]
     public function profile(): Response
     {
+        /** @var Client $user */
         $user = $this->getUser();
 
         return $this->render('client/profile.html.twig', [
@@ -34,33 +37,33 @@ class ClientController extends AbstractController
         ]);
     }
 
-    // ClientController.php
-#[Route('/tickets', name: 'app_client_tickets')]
-public function tickets(
-    TicketRepository $ticketRepository,
-    QRCodeService $qrCodeService
-): Response {
-    $user = $this->getUser();
-    $tickets = $ticketRepository->findByClient($user->getId());
+    #[Route('/tickets', name: 'app_client_tickets')]
+    public function tickets(
+        TicketRepository $ticketRepository,
+        QRCodeService $qrCodeService
+    ): Response {
+        /** @var Client $user */
+        $user    = $this->getUser();
+        $tickets = $ticketRepository->findByClient($user->getId());
 
-    $ticketsWithQR = [];
-    foreach ($tickets as $ticket) {
-        $ticketsWithQR[] = [
-            'ticket' => $ticket,
-            'qrCode' => $qrCodeService->generateTicketQRCode($ticket->getCodeTicket()),
-        ];
+        $ticketsWithQR = [];
+        foreach ($tickets as $ticket) {
+            $ticketsWithQR[] = [
+                'ticket' => $ticket,
+                'qrCode' => $qrCodeService->generateTicketQRCode($ticket->getCodeTicket()),
+            ];
+        }
+
+        return $this->render('client/tickets.html.twig', [
+            'ticketsWithQR' => $ticketsWithQR,
+        ]);
     }
-
-    return $this->render('client/tickets.html.twig', [
-        'ticketsWithQR' => $ticketsWithQR,
-    ]);
-}
-
 
     #[Route('/recus', name: 'app_client_recus')]
     public function recus(RecuRepository $recuRepository): Response
     {
-        $user = $this->getUser();
+        /** @var Client $user */
+        $user  = $this->getUser();
         $recus = $recuRepository->findByClient($user->getId());
 
         return $this->render('client/recus.html.twig', [
@@ -75,20 +78,23 @@ public function tickets(
         TicketRepository $ticketRepository,
         QRCodeService $qrCodeService
     ): Response {
+        /** @var Client $user */
+        $user = $this->getUser();
+
         $recu = $recuRepository->find($id);
 
-        if (!$recu || $recu->getCommande()->getClient() !== $this->getUser()) {
+        if (!$recu || $recu->getCommande()->getClient() !== $user) {
             throw $this->createNotFoundException('Reçu non trouvé');
         }
 
-        $commande = $recu->getCommande();
+        $commande      = $recu->getCommande();
         $ticketsWithQR = [];
 
         foreach ($commande->getLigneCommandes() as $ligne) {
             $tickets = $ticketRepository->findBy(['ligneCommande' => $ligne]);
 
             foreach ($tickets as $ticket) {
-                $data = $ticket->getCodeTicket();
+                $data           = $ticket->getCodeTicket();
                 $ticketsWithQR[] = [
                     'ticket' => $ticket,
                     'qrCode' => $qrCodeService->generateTicketQRCode($data),

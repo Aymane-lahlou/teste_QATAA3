@@ -135,6 +135,8 @@
         font-weight: 600;
         transition: all 0.3s;
         cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
     }
     .btn-remove:hover {
         background: #dc2626;
@@ -192,6 +194,119 @@
         margin-bottom: 15px;
         font-size: 1rem;
         color: #64748b;
+    }
+
+    /* Promo Code Section */
+    .promo-section {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border: 2px dashed #d1d5db;
+        border-radius: 16px;
+        padding: 18px;
+        margin-bottom: 20px;
+    }
+    .promo-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .promo-label i {
+        font-size: 0.9rem;
+    }
+    .promo-input-group {
+        display: flex;
+        gap: 8px;
+        align-items: stretch;
+    }
+    .promo-input {
+        flex: 1;
+        padding: 12px 14px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        transition: all 0.3s;
+        background: white;
+    }
+    .promo-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    .promo-input::placeholder {
+        color: #94a3b8;
+        text-transform: none;
+    }
+    .btn-apply-promo {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 18px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        white-space: nowrap;
+        min-width: 100px;
+    }
+    .btn-apply-promo:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    }
+    .btn-apply-promo:active {
+        transform: translateY(0);
+    }
+
+    .promo-applied {
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        border: 2px solid #86efac;
+        padding: 14px 16px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: slideDown 0.4s ease;
+    }
+    .promo-applied-text {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #166534;
+    }
+    .btn-remove-promo {
+        background: #166534;
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    .btn-remove-promo:hover {
+        background: #14532d;
+    }
+
+    .discount-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        font-size: 1rem;
+        color: #16a34a;
+        font-weight: 700;
+        padding: 10px 12px;
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border-radius: 10px;
     }
 
     .summary-total {
@@ -390,7 +505,7 @@
                 {% endfor %}
 
                 <!-- Clear Button -->
-                <a href="{{ path('app_cart_clear') }}" class="btn-clear-cart">
+                <a href="{{ path('app_cart_clear') }}" class="btn-clear-cart" onclick="return confirm('Vider tout le panier ?')">
                     <i class="fas fa-trash"></i> Vider le panier
                 </a>
             </div>
@@ -403,30 +518,77 @@
                         Récapitulatif
                     </div>
 
+                    <!-- Promo Code Section -->
+                    {% if promo_code %}
+                        <div class="promo-applied">
+                            <div class="promo-applied-text">
+                                <i class="fas fa-check-circle"></i>
+                                <span><strong>{{ promo_code }}</strong> appliqué</span>
+                            </div>
+                            <form action="{{ path('app_cart') }}" method="post" style="display: inline;">
+                                <input type="hidden" name="promo_code" value="">
+                                <button type="submit" class="btn-remove-promo" title="Retirer le code promo">
+                                    <i class="fas fa-times me-1"></i>Retirer
+                                </button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <div class="promo-section">
+                            <div class="promo-label">
+                                <i class="fas fa-tag"></i>
+                                Code promo
+                            </div>
+                            <form action="{{ path('app_cart') }}" method="post">
+                                <div class="promo-input-group">
+                                    <input type="text" 
+                                           name="promo_code" 
+                                           class="promo-input" 
+                                           placeholder="Ex: QATA3_10"
+                                           value="{{ promo_code|default('') }}">
+                                    <button type="submit" class="btn-apply-promo">
+                                        Appliquer
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    {% endif %}
+
                     <div class="summary-row">
                         <span>Sous-total</span>
                         <strong>{{ total|number_format(2, '.', ',') }} MAD</strong>
                     </div>
 
+                    {% if discount_amount is defined and discount_amount > 0 %}
+                        <div class="discount-row">
+                            <span>
+                                <i class="fas fa-tag me-1"></i>
+                                Réduction ({{ (discount_rate * 100)|number_format(0) }}%)
+                            </span>
+                            <span>-{{ discount_amount|number_format(2, '.', ',') }} MAD</span>
+                        </div>
+                    {% endif %}
+
                     <div class="summary-total">
                         <strong>Total</strong>
-                        <strong class="total-amount">{{ total|number_format(2, '.', ',') }} MAD</strong>
+                        <strong class="total-amount">
+                            {{ (total_after_discount is defined ? total_after_discount : total)|number_format(2, '.', ',') }} MAD
+                        </strong>
                     </div>
 
                     <div style="margin-top: 30px;">
                         {% if app.user %}
                             <a href="{{ path('app_checkout') }}" class="btn-checkout">
-                                <i class="fas fa-credit-card"></i> Procéder au paiement
+                                <i class="fas fa-credit-card me-2"></i>Procéder au paiement
                             </a>
                         {% else %}
                             <p style="text-align: center; color: #64748b; font-size: 0.95rem; margin-bottom: 20px;">
                                 Connectez-vous pour finaliser votre achat
                             </p>
                             <a href="{{ path('app_login') }}" class="btn-login">
-                                <i class="fas fa-sign-in-alt"></i> Se connecter
+                                <i class="fas fa-sign-in-alt me-2"></i>Se connecter
                             </a>
                             <a href="{{ path('app_register') }}" class="btn-register">
-                                <i class="fas fa-user-plus"></i> Créer un compte
+                                <i class="fas fa-user-plus me-2"></i>Créer un compte
                             </a>
                         {% endif %}
                     </div>

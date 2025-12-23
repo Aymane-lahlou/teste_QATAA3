@@ -90,7 +90,7 @@
         margin-bottom: 15px;
         border-bottom: 1px solid #e2e8f0;
     }
-    .order-item:last-child { border-bottom: none; }
+    .order-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 
     .item-title {
         font-weight: 700;
@@ -105,6 +105,116 @@
         font-size: 0.75rem;
         font-weight: 700;
         margin-right: 8px;
+    }
+
+    /* Promo Code Section */
+    .promo-section {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border: 2px dashed #d1d5db;
+        border-radius: 16px;
+        padding: 18px;
+        margin: 20px 0;
+    }
+    .promo-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .promo-input-group {
+        display: flex;
+        gap: 8px;
+        align-items: stretch;
+    }
+    .promo-input {
+        flex: 1;
+        padding: 12px 14px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        transition: all 0.3s;
+        background: white;
+    }
+    .promo-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    .btn-apply-promo {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 18px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+        min-width: 100px;
+    }
+    .btn-apply-promo:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    }
+
+    .promo-applied {
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        border: 2px solid #86efac;
+        padding: 14px 16px;
+        border-radius: 12px;
+        margin: 20px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: slideDown 0.4s ease;
+    }
+    .promo-applied-text {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #166534;
+    }
+    .btn-remove-promo {
+        background: #166534;
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    .btn-remove-promo:hover {
+        background: #14532d;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 15px 0;
+        font-size: 1rem;
+        color: #64748b;
+    }
+
+    .discount-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 15px 0;
+        font-size: 1rem;
+        color: #16a34a;
+        font-weight: 700;
+        padding: 10px 12px;
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border-radius: 10px;
     }
 
     .total-section {
@@ -261,10 +371,62 @@
                         <strong style="color: #1e293b;">{{ item.sousTotal|number_format(2, '.', ',') }} MAD</strong>
                     </div>
                 {% endfor %}
+
+                <!-- Promo Code Section -->
+                {% if promo_code %}
+                    <div class="promo-applied">
+                        <div class="promo-applied-text">
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>{{ promo_code }}</strong> appliqué</span>
+                        </div>
+                        <form action="{{ path('app_checkout') }}" method="post" style="display: inline;">
+                            <input type="hidden" name="promo_code" value="">
+                            <button type="submit" class="btn-remove-promo" title="Retirer le code promo">
+                                <i class="fas fa-times me-1"></i>Retirer
+                            </button>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="promo-section">
+                        <div class="promo-label">
+                            <i class="fas fa-tag"></i>
+                            Code promo
+                        </div>
+                        <form action="{{ path('app_checkout') }}" method="post">
+                            <div class="promo-input-group">
+                                <input type="text" 
+                                       name="promo_code" 
+                                       class="promo-input" 
+                                       placeholder="Ex: QATA3_10"
+                                       value="{{ promo_code|default('') }}">
+                                <button type="submit" class="btn-apply-promo">
+                                    Appliquer
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
+
+                <div class="summary-row">
+                    <span>Sous-total</span>
+                    <strong>{{ total|number_format(2, '.', ',') }} MAD</strong>
+                </div>
+
+                {% if discount_amount is defined and discount_amount > 0 %}
+                    <div class="discount-row">
+                        <span>
+                            <i class="fas fa-tag me-1"></i>
+                            Réduction ({{ (discount_rate * 100)|number_format(0) }}%)
+                        </span>
+                        <span>-{{ discount_amount|number_format(2, '.', ',') }} MAD</span>
+                    </div>
+                {% endif %}
                 
                 <div class="total-section">
                     <h5 style="margin: 0; color: #1e293b;">Total</h5>
-                    <div class="total-amount">{{ total|number_format(2, '.', ',') }} MAD</div>
+                    <div class="total-amount">
+                        {{ (total_after_discount is defined ? total_after_discount : total)|number_format(2, '.', ',') }} MAD
+                    </div>
                 </div>
             </div>
 
@@ -350,7 +512,7 @@
                     <input type="hidden" name="_token" value="{{ csrf_token('checkout') }}">
 
                     <button type="submit" class="btn-pay" id="submitBtn">
-                        <i class="fas fa-lock"></i> Confirmer le paiement ({{ total|number_format(2, '.', ',') }} MAD)
+                        <i class="fas fa-lock"></i> Confirmer le paiement ({{ (total_after_discount is defined ? total_after_discount : total)|number_format(2, '.', ',') }} MAD)
                     </button>
                 </form>
             </div>

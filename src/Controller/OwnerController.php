@@ -34,7 +34,7 @@ public function dashboard(
     $evenementsActifs   = $evenementRepository->countActiveEvents();
 
     // Statistiques par événement
-    $ventesByEvent = $ligneCommandeRepository->getVentesByEvent();
+    $ventesByEvent = $ligneCommandeRepository->getRevenueByEvent();
 
     // Activité récente (5 dernières commandes)
     $lastOrders = $commandeRepository->findLastOrders(5);
@@ -50,7 +50,7 @@ public function dashboard(
 }
 
 
- #[Route('/events', name: 'app_owner_events')]
+#[Route('/events', name: 'app_owner_events')]
 public function events(
     EvenementRepository $evenementRepository,
     LigneCommandeRepository $ligneCommandeRepository
@@ -63,11 +63,21 @@ public function events(
             $ligneCommandeRepository->countTicketsByEvent($evenement->getId());
     }
 
+    // ✅ ICI : appel sur le REPOSITORY
+    $revenueData = $ligneCommandeRepository->getRevenueByEvent();
+    $revenueByEvent = [];
+    foreach ($revenueData as $data) {
+        $revenueByEvent[$data['event_id']] = $data['revenus'];
+    }
+
     return $this->render('owner/events.html.twig', [
         'evenements'       => $evenements,
         'tickets_by_event' => $ticketsByEvent,
+        'revenue_by_event' => $revenueByEvent,
     ]);
 }
+
+
 
 
     #[Route('/clients', name: 'app_owner_clients')]
@@ -87,6 +97,7 @@ public function reports(
     ClientRepository $clientRepository,
     EvenementRepository $evenementRepository
 ): Response {
+    $statsByEvent = $ligneCommandeRepository->getStatsByEvent();
     $startDate = new \DateTime('-30 days');
     $endDate   = new \DateTime();
 

@@ -14,16 +14,16 @@ class LigneCommandeRepository extends ServiceEntityRepository
     }
 
     // Statistiques ventes par événement (pour le dashboard)
-    public function getVentesByEvent(): array
+    public function getRevenueByEvent(): array
     {
         return $this->createQueryBuilder('lc')
-            ->select('e.titre as event_titre, SUM(lc.quantite) as total_ventes, SUM(lc.sousTotal) as revenus')
+            ->select('e.id as event_id, e.titre as event_titre, SUM(lc.quantite) as total_ventes, SUM(lc.sousTotal) as revenus')
             ->join('lc.typeBillet', 'tb')
             ->join('tb.evenement', 'e')
             ->groupBy('e.id')
             ->orderBy('total_ventes', 'DESC')
             ->getQuery()
-            ->getResult();
+            ->getArrayResult();
     }
 
     // Ventes par type de billet

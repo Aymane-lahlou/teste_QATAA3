@@ -154,6 +154,11 @@
         color: white;
     }
 
+    .badge-sport {
+        background: rgba(139, 92, 246, 0.95);
+        color: white;
+    }
+
     .event-content {
         padding: 25px;
         flex: 1;
@@ -303,6 +308,8 @@
                         <i class="fas fa-theater-masks"></i>
                     {% elseif categorie == 'Formation' %}
                         <i class="fas fa-graduation-cap"></i>
+                    {% elseif categorie == 'Sport' %}
+                        <i class="fas fa-football-ball"></i>
                     {% endif %}
                     {{ categorie }}
                 </a>
@@ -339,6 +346,7 @@
                             {% elseif evenement.categorie == 'Conférence' %}badge-conference
                             {% elseif evenement.categorie == 'Spectacle' %}badge-spectacle
                             {% elseif evenement.categorie == 'Formation' %}badge-formation
+                            {% elseif evenement.categorie == 'Sport' %}badge-sport
                             {% endif %}">
                             {{ evenement.categorie }}
                         </span>

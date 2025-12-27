@@ -1,0 +1,528 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Éditer Client - Qataa3{% endblock %}
+
+{% block body %}
+<style>
+    .edit-page {
+        background: linear-gradient(135deg, #f8fafc 0%, #e5e7eb 100%);
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+
+    .page-header {
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+        padding: 10px 20px;
+        background: white;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        margin-bottom: 1.5rem;
+        display: inline-block;
+    }
+    .back-link:hover {
+        background: #667eea;
+        color: white;
+        transform: translateX(-4px);
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.2);
+    }
+
+    .page-title-block {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem 2.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        position: relative;
+        overflow: hidden;
+    }
+    .page-title-block::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+    }
+
+    .page-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0 0 0.5rem 0;
+        letter-spacing: -0.02em;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    .page-title i {
+        color: #667eea;
+        font-size: 2rem;
+    }
+
+    .page-subtitle {
+        color: #64748b;
+        margin: 0;
+        font-size: 1.05rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        transition: all 0.3s ease;
+    }
+    .form-card:hover {
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.12);
+    }
+
+    .card-header {
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #f1f5f9;
+    }
+    .card-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .card-title i {
+        font-size: 1.3rem;
+        color: #667eea;
+    }
+
+    .form-group {
+        margin-bottom: 1.8rem;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 0.95rem;
+        margin-bottom: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .form-label i {
+        color: #667eea;
+        font-size: 0.9rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 14px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: #f8fafc;
+        font-family: inherit;
+    }
+    .form-input:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        transform: translateY(-2px);
+    }
+    .form-input:hover:not(:focus) {
+        border-color: #cbd5e1;
+    }
+
+    .form-hint {
+        display: block;
+        margin-top: 0.6rem;
+        font-size: 0.85rem;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .form-hint i {
+        color: #3b82f6;
+    }
+
+    .password-section {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        padding: 1.5rem;
+        border-radius: 14px;
+        margin-top: 2rem;
+        border: 2px solid #fbbf24;
+    }
+    .password-section .form-label {
+        color: #92400e;
+    }
+    .password-section .form-label i {
+        color: #f59e0b;
+    }
+
+    .action-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 2px solid #f1f5f9;
+    }
+
+    .btn-action {
+        padding: 16px 24px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        text-decoration: none;
+        border: none;
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-action::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+    .btn-action:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+    .btn-action i {
+        font-size: 1.1rem;
+        position: relative;
+        z-index: 1;
+    }
+    .btn-action span {
+        position: relative;
+        z-index: 1;
+    }
+
+    .btn-cancel {
+        background: white;
+        border: 3px solid #e2e8f0;
+        color: #64748b;
+    }
+    .btn-cancel:hover {
+        border-color: #cbd5e1;
+        background: #f8fafc;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    }
+    .btn-save:hover {
+        background: linear-gradient(135deg, #5568d3 0%, #653a8b 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        height: fit-content;
+        position: sticky;
+        top: 2rem;
+    }
+
+    .info-item {
+        padding: 1.3rem;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 14px;
+        border-left: 5px solid #667eea;
+        margin-bottom: 1.2rem;
+        transition: all 0.3s ease;
+    }
+    .info-item:hover {
+        transform: translateX(6px);
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.12);
+    }
+
+    .info-label {
+        font-size: 0.85rem;
+        color: #64748b;
+        margin-bottom: 0.6rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .info-value {
+        font-weight: 700;
+        color: #0f172a;
+        font-size: 1.05rem;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 18px;
+        border-radius: 999px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .status-active {
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        color: #065f46;
+        border: 2px solid #10b981;
+    }
+
+    .status-suspended {
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        color: #991b1b;
+        border: 2px solid #ef4444;
+    }
+
+    .role-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        color: #92400e;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-right: 0.6rem;
+        margin-bottom: 0.6rem;
+        border: 2px solid #fbbf24;
+        box-shadow: 0 2px 8px rgba(251, 191, 36, 0.2);
+    }
+
+    @media (max-width: 1024px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+        .info-card {
+            position: static;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .edit-page {
+            padding: 1rem 0;
+        }
+        .page-title {
+            font-size: 1.6rem;
+        }
+        .form-card, .info-card {
+            padding: 1.5rem;
+        }
+        .action-buttons {
+            grid-template-columns: 1fr;
+        }
+        .form-input {
+            font-size: 16px;
+        }
+    }
+</style>
+
+<div class="edit-page">
+    <div class="container">
+        <!-- Back Button -->
+        <a href="{{ path('app_responsable_clients') }}" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            <span>Retour à la liste</span>
+        </a>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-title-block">
+                <h1 class="page-title">
+                    <i class="fas fa-user-edit"></i>
+                    <span>Éditer Client</span>
+                </h1>
+                <p class="page-subtitle">
+                    <i class="fas fa-user-circle"></i>
+                    {{ client.prenom }} {{ client.nom }} · {{ client.email }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Form Grid -->
+        <div class="form-grid">
+            <!-- Main Form -->
+            <div class="form-card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-user-circle"></i>
+                        Informations Personnelles
+                    </h2>
+                </div>
+
+                <form method="POST">
+                    <!-- Nom -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-id-card"></i>
+                            Nom
+                        </label>
+                        <input type="text" name="nom" value="{{ client.nom }}" required class="form-input">
+                    </div>
+
+                    <!-- Prénom -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-user"></i>
+                            Prénom
+                        </label>
+                        <input type="text" name="prenom" value="{{ client.prenom }}" required class="form-input">
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-envelope"></i>
+                            Adresse Email
+                        </label>
+                        <input type="email" name="email" value="{{ client.email }}" required class="form-input">
+                    </div>
+
+                    <!-- Téléphone -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-phone"></i>
+                            Téléphone
+                        </label>
+                        <input type="tel" name="telephone" value="{{ client.telephone }}" class="form-input" placeholder="+212 6XX XXX XXX">
+                    </div>
+
+                    <!-- Nouveau mot de passe -->
+                    <div class="password-section">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">
+                                <i class="fas fa-lock"></i>
+                                Nouveau Mot de Passe (optionnel)
+                            </label>
+                            <input type="password" name="new_password" id="newPassword" class="form-input" placeholder="Laisser vide pour ne pas modifier" style="background: white;">
+                            <span class="form-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Minimum 8 caractères, incluant lettres et chiffres
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <a href="{{ path('app_responsable_clients') }}" class="btn-action btn-cancel">
+                            <i class="fas fa-times-circle"></i>
+                            <span>Annuler</span>
+                        </a>
+                        <button type="submit" class="btn-action btn-save">
+                            <i class="fas fa-save"></i>
+                            <span>Enregistrer</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Info Sidebar -->
+            <div class="info-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-info-circle"></i>
+                        Informations du Compte
+                    </h3>
+                </div>
+
+                <!-- Statut -->
+                <div class="info-item" style="border-left-color: {{ client.statutCompte == 'actif' ? '#10b981' : '#ef4444' }};">
+                    <div class="info-label">Statut du compte</div>
+                    <div class="info-value">
+                        {% if client.statutCompte == 'actif' %}
+                            <span class="status-badge status-active">
+                                <i class="fas fa-check-circle"></i>
+                                Actif
+                            </span>
+                        {% else %}
+                            <span class="status-badge status-suspended">
+                                <i class="fas fa-ban"></i>
+                                Suspendu
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Date d'inscription -->
+                <div class="info-item" style="border-left-color: #3b82f6;">
+                    <div class="info-label">
+                        <i class="fas fa-calendar-alt"></i>
+                        Date d'inscription
+                    </div>
+                    <div class="info-value">{{ client.dateInscription|date('d/m/Y à H:i') }}</div>
+                </div>
+
+                <!-- ID Client -->
+                <div class="info-item" style="border-left-color: #8b5cf6;">
+                    <div class="info-label">
+                        <i class="fas fa-hashtag"></i>
+                        Identifiant Client
+                    </div>
+                    <div class="info-value">#{{ client.id }}</div>
+                </div>
+
+                <!-- Rôles -->
+                <div class="info-item" style="border-left-color: #f59e0b;">
+                    <div class="info-label">
+                        <i class="fas fa-shield-alt"></i>
+                        Rôles & Permissions
+                    </div>
+                    <div style="margin-top: 0.8rem;">
+                        {% for role in client.roles %}
+                            <span class="role-badge">{{ role }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

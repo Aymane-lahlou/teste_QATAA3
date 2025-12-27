@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -223,6 +224,53 @@ class ResponsableController extends AbstractController
 
         return $this->render('responsable/clients/index.html.twig', [
             'clients' => $clients,
+        ]);
+    }
+
+    #[Route('/client/{id}/edit', name: 'app_responsable_client_edit')]
+    public function editClient(
+        Request $request,
+        Client $client,
+        EntityManagerInterface $em,
+        UserPasswordHasherInterface $passwordHasher
+    ): Response {
+        if ($request->isMethod('POST')) {
+            $nom = $request->request->get('nom');
+            $prenom = $request->request->get('prenom');
+            $email = $request->request->get('email');
+            $telephone = $request->request->get('telephone');
+            $newPassword = $request->request->get('new_password');
+
+            // Vérifier si l'email est déjà utilisé par un autre client
+            if ($email !== $client->getEmail()) {
+                $existingClient = $em->getRepository(Client::class)->findOneBy(['email' => $email]);
+                if ($existingClient) {
+                    $this->addFlash('error', 'Cet email est déjà utilisé par un autre client.');
+                    return $this->redirectToRoute('app_responsable_client_edit', ['id' => $client->getId()]);
+                }
+            }
+
+            // Mettre à jour les informations
+            $client->setNom($nom);
+            $client->setPrenom($prenom);
+            $client->setEmail($email);
+            $client->setTelephone($telephone);
+
+            // Réinitialiser le mot de passe si fourni
+            if (!empty($newPassword) && strlen($newPassword) >= 8) {
+                $client->setMotDePasse($passwordHasher->hashPassword($client, $newPassword));
+            } elseif (!empty($newPassword)) {
+                $this->addFlash('warning', 'Le mot de passe doit contenir au moins 8 caractères.');
+                return $this->redirectToRoute('app_responsable_client_edit', ['id' => $client->getId()]);
+            }
+
+            $em->flush();
+            $this->addFlash('success', 'Client mis à jour avec succès !');
+            return $this->redirectToRoute('app_responsable_clients');
+        }
+
+        return $this->render('responsable/clients/edit.html.twig', [
+            'client' => $client,
         ]);
     }
 

@@ -37,7 +37,7 @@ class HomeController extends AbstractController
             $evenements = $evenementRepository->findActiveEvents();
         }
 
-        $categories = ['Concert', 'Conférence', 'Festival', 'Spectacle', 'Formation'];
+        $categories = ['Concert', 'Conférence', 'Festival', 'Spectacle', 'Formation', 'Sport'];
 
         return $this->render('home/events.html.twig', [
             'evenements'        => $evenements,

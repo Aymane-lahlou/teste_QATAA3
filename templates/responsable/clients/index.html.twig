@@ -4,174 +4,429 @@
 
 {% block body %}
 <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
     .clients-header {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 48px 32px;
-        margin-bottom: 32px;
+        padding: 56px 0;
+        margin-bottom: 40px;
         color: white;
-        border-radius: 0 0 24px 24px;
+        position: relative;
+        overflow: hidden;
+    }
+    .clients-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at top right, rgba(255,255,255,0.1), transparent 70%);
+    }
+    .clients-header .container-fluid {
+        position: relative;
+        z-index: 1;
     }
     .clients-header h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
         font-weight: 800;
-        margin: 0 0 8px 0;
-        letter-spacing: -.02em;
+        margin: 0 0 12px 0;
+        letter-spacing: -0.02em;
+        display: flex;
+        align-items: center;
+        gap: 16px;
     }
     .clients-header p {
         margin: 0;
-        opacity: 0.9;
-        font-size: 1rem;
+        opacity: 0.95;
+        font-size: 1.1rem;
+        font-weight: 400;
     }
 
     .stats-row {
-        margin-top: -40px;
-        margin-bottom: 32px;
+        margin-top: -50px;
+        margin-bottom: 40px;
+        position: relative;
+        z-index: 10;
     }
     .stat-box {
         background: white;
-        border-radius: 16px;
-        padding: 24px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border-radius: 20px;
+        padding: 32px 24px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
         text-align: center;
-        border: 1px solid #e5e7eb;
+        border: 1px solid rgba(148, 163, 184, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .stat-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s ease;
+    }
+    .stat-box:hover::before {
+        transform: scaleX(1);
+    }
+    .stat-box:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.15);
     }
     .stat-box .stat-number {
-        font-size: 2rem;
-        font-weight: 800;
-        color: #0f172a;
-        margin-bottom: 4px;
+        font-size: 2.8rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+        line-height: 1;
     }
     .stat-box .stat-label {
-        font-size: 0.85rem;
-        color: #6b7280;
+        font-size: 0.9rem;
+        color: #64748b;
+        font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.08em;
+    }
+    .stat-box .stat-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 2.5rem;
+        opacity: 0.08;
     }
 
     .search-filter-bar {
         background: white;
-        border-radius: 16px;
-        padding: 20px 24px;
-        margin-bottom: 24px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 28px 32px;
+        margin-bottom: 32px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        border: 1px solid rgba(148, 163, 184, 0.12);
     }
     .search-box {
         position: relative;
     }
     .search-box input {
-        border-radius: 12px;
-        padding: 12px 16px 12px 44px;
-        border: 1px solid #d1d5db;
+        border-radius: 14px;
+        padding: 16px 20px 16px 52px;
+        border: 2px solid #e2e8f0;
         width: 100%;
-        font-size: 0.95rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f8fafc;
+    }
+    .search-box input:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
     }
     .search-box i {
         position: absolute;
-        left: 16px;
+        left: 20px;
         top: 50%;
         transform: translateY(-50%);
-        color: #9ca3af;
+        color: #94a3b8;
+        font-size: 1.1rem;
+    }
+    .filter-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #64748b;
+        font-weight: 500;
+        font-size: 1rem;
+    }
+    .filter-info i {
+        color: #667eea;
     }
 
     .client-card {
         background: white;
-        border-radius: 16px;
-        padding: 24px;
-        margin-bottom: 16px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-        border: 1px solid #e5e7eb;
-        transition: all 0.3s ease;
+        border-radius: 20px;
+        padding: 28px 32px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: 24px;
+        position: relative;
+        overflow: hidden;
+    }
+    .client-card::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 0;
+        background: linear-gradient(135deg, #667eea15, #764ba215);
+        transition: width 0.4s ease;
+    }
+    .client-card:hover::before {
+        width: 100%;
     }
     .client-card:hover {
-        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
-        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(102, 126, 234, 0.15);
+        transform: translateY(-4px);
+        border-color: rgba(102, 126, 234, 0.3);
     }
 
     .client-avatar {
-        width: 64px;
-        height: 64px;
+        width: 72px;
+        height: 72px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.4rem;
-        font-weight: 700;
+        font-size: 1.6rem;
+        font-weight: 800;
         color: white;
         flex-shrink: 0;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        position: relative;
+        z-index: 1;
     }
 
     .client-info {
         flex: 1;
         min-width: 0;
+        position: relative;
+        z-index: 1;
     }
     .client-name {
-        font-size: 1.1rem;
+        font-size: 1.25rem;
         font-weight: 700;
         color: #0f172a;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
+        letter-spacing: -0.01em;
     }
     .client-email {
-        font-size: 0.9rem;
-        color: #6b7280;
-        margin-bottom: 8px;
+        font-size: 0.95rem;
+        color: #64748b;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .client-email i {
+        color: #667eea;
     }
     .client-meta {
         display: flex;
-        gap: 16px;
+        gap: 20px;
         flex-wrap: wrap;
-        font-size: 0.85rem;
-        color: #9ca3af;
+        font-size: 0.88rem;
+        color: #94a3b8;
+        font-weight: 500;
     }
     .client-meta span {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 7px;
+    }
+    .client-meta i {
+        color: #667eea;
     }
 
     .client-badges {
         display: flex;
-        gap: 8px;
+        gap: 10px;
         flex-direction: column;
         align-items: flex-end;
+        position: relative;
+        z-index: 1;
     }
     .badge-modern {
-        padding: 6px 14px;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 600;
+        padding: 8px 18px;
+        border-radius: 12px;
+        font-size: 0.78rem;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.03em;
+        letter-spacing: 0.05em;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    .badge-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     }
 
     .client-actions {
         flex-shrink: 0;
+        display: flex;
+        gap: 12px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* MODERN BUTTONS */
+    .btn-action {
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .btn-action::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(-100%);
+        transition: transform 0.4s ease;
+    }
+    .btn-action:hover::before {
+        transform: translateX(0);
+    }
+    .btn-action:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+    .btn-action:active {
+        transform: translateY(-1px);
+    }
+
+    .btn-edit {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    .btn-edit:hover {
+        background: linear-gradient(135deg, #5568d3 0%, #653a8b 100%);
+    }
+
+    .btn-suspend {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        border: none;
+    }
+    .btn-suspend:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    }
+
+    .btn-activate {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+    }
+    .btn-activate:hover {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    }
+
+    .btn-protected {
+        background: #f1f5f9;
+        color: #94a3b8;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+    .btn-protected:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    /* Icons styling */
+    .btn-action i {
+        font-size: 0.95rem;
+        transition: transform 0.3s ease;
+    }
+    .btn-action:hover i {
+        transform: scale(1.1);
     }
 
     .empty-state {
         text-align: center;
-        padding: 80px 20px;
+        padding: 100px 20px;
         background: white;
-        border-radius: 16px;
-        border: 2px dashed #d1d5db;
+        border-radius: 20px;
+        border: 2px dashed #e2e8f0;
     }
     .empty-state i {
-        font-size: 4rem;
-        color: #d1d5db;
-        margin-bottom: 16px;
+        font-size: 5rem;
+        color: #e2e8f0;
+        margin-bottom: 24px;
     }
     .empty-state h3 {
-        color: #6b7280;
-        font-weight: 600;
+        color: #64748b;
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin-bottom: 8px;
+    }
+    .empty-state p {
+        color: #94a3b8;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .client-card {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .client-badges {
+            flex-direction: row;
+            width: 100%;
+            justify-content: flex-start;
+        }
+        .client-actions {
+            width: 100%;
+            flex-direction: column;
+        }
+        .btn-action {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .clients-header h1 {
+            font-size: 1.8rem;
+        }
+        .stat-box {
+            padding: 24px 16px;
+        }
+        .stat-box .stat-number {
+            font-size: 2.2rem;
+        }
+        .filter-info {
+            margin-top: 16px;
+            justify-content: center;
+        }
     }
 </style>
 
 <div class="clients-header">
     <div class="container-fluid px-4">
-        <h1><i class="fas fa-users-cog"></i> Gestion des Clients</h1>
+        <h1>
+            <i class="fas fa-users-cog"></i> 
+            Gestion des Clients
+        </h1>
         <p>Administrez et supervisez les comptes utilisateurs de la plateforme</p>
     </div>
 </div>
@@ -179,34 +434,38 @@
 <div class="container-fluid px-4 pb-5">
 
     <!-- Stats KPI -->
-    <div class="row g-3 stats-row">
-        <div class="col-md-3">
+    <div class="row g-4 stats-row">
+        <div class="col-lg-3 col-md-6">
             <div class="stat-box">
-                <div class="stat-number text-primary">{{ clients|length }}</div>
+                <i class="fas fa-users stat-icon"></i>
+                <div class="stat-number">{{ clients|length }}</div>
                 <div class="stat-label">Total Clients</div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-6">
             <div class="stat-box">
-                <div class="stat-number text-success">
+                <i class="fas fa-check-circle stat-icon" style="color: #10b981;"></i>
+                <div class="stat-number" style="background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                     {% set actifs = clients|filter(c => c.statutCompte == 'actif')|length %}
                     {{ actifs }}
                 </div>
                 <div class="stat-label">Comptes Actifs</div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-6">
             <div class="stat-box">
-                <div class="stat-number text-warning">
+                <i class="fas fa-ban stat-icon" style="color: #f59e0b;"></i>
+                <div class="stat-number" style="background: linear-gradient(135deg, #f59e0b, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                     {% set suspendus = clients|filter(c => c.statutCompte == 'suspendu')|length %}
                     {{ suspendus }}
                 </div>
                 <div class="stat-label">Suspendus</div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-6">
             <div class="stat-box">
-                <div class="stat-number text-info">
+                <i class="fas fa-user stat-icon" style="color: #06b6d4;"></i>
+                <div class="stat-number" style="background: linear-gradient(135deg, #06b6d4, #0891b2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                     {% set simpleClients = clients|filter(c => 'ROLE_CLIENT' in c.roles)|length %}
                     {{ simpleClients }}
                 </div>
@@ -218,14 +477,17 @@
     <!-- Search & Filter -->
     <div class="search-filter-bar">
         <div class="row align-items-center g-3">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
                     <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par nom, email, téléphone...">
                 </div>
             </div>
-            <div class="col-md-6 text-end">
-                <span class="text-muted"><i class="fas fa-filter"></i> {{ clients|length }} client(s) trouvé(s)</span>
+            <div class="col-md-4 text-md-end text-center">
+                <div class="filter-info">
+                    <i class="fas fa-filter"></i> 
+                    <span><strong>{{ clients|length }}</strong> client(s) trouvé(s)</span>
+                </div>
             </div>
         </div>
     </div>
@@ -241,65 +503,73 @@
         <div id="clientsList">
             {% for client in clients %}
                 {% set initials = (client.prenom|first ~ client.nom|first)|upper %}
-                {% set colors = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4'] %}
+                {% set colors = ['#667eea', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4'] %}
                 {% set avatarColor = colors[client.id % 6] %}
 
                 <div class="client-card" data-client="{{ client.nom|lower }} {{ client.prenom|lower }} {{ client.email|lower }}">
-                    <div class="client-avatar" style="background: {{ avatarColor }};">
+                    <div class="client-avatar" style="background: linear-gradient(135deg, {{ avatarColor }}, {{ avatarColor }}dd);">
                         {{ initials }}
                     </div>
 
                     <div class="client-info">
                         <div class="client-name">{{ client.prenom }} {{ client.nom }}</div>
-                        <div class="client-email"><i class="fas fa-envelope"></i> {{ client.email }}</div>
+                        <div class="client-email">
+                            <i class="fas fa-envelope"></i> 
+                            {{ client.email }}
+                        </div>
                         <div class="client-meta">
                             <span><i class="fas fa-phone"></i> {{ client.telephone ?? 'N/A' }}</span>
-                            <span><i class="fas fa-calendar"></i> Inscrit le {{ client.dateInscription|date('d/m/Y') }}</span>
+                            <span><i class="fas fa-calendar-alt"></i> {{ client.dateInscription|date('d/m/Y') }}</span>
                             <span><i class="fas fa-hashtag"></i> ID: {{ client.id }}</span>
                         </div>
                     </div>
 
                     <div class="client-badges">
                         {% if 'ROLE_OWNER' in client.roles %}
-                            <span class="badge-modern bg-warning text-dark">
+                            <span class="badge-modern" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white;">
                                 <i class="fas fa-crown"></i> Owner
                             </span>
                         {% elseif 'ROLE_RESPONSABLE' in client.roles %}
-                            <span class="badge-modern" style="background: #3b82f6; color: white;">
+                            <span class="badge-modern" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white;">
                                 <i class="fas fa-user-tie"></i> Responsable
                             </span>
                         {% else %}
-                            <span class="badge-modern bg-secondary text-white">
+                            <span class="badge-modern" style="background: linear-gradient(135deg, #6b7280, #4b5563); color: white;">
                                 <i class="fas fa-user"></i> Client
                             </span>
                         {% endif %}
 
-                        <span class="badge-modern {{ client.statutCompte == 'actif' ? 'bg-success text-white' : 'bg-danger text-white' }}">
+                        <span class="badge-modern {{ client.statutCompte == 'actif' ? '' : '' }}" 
+                              style="background: {{ client.statutCompte == 'actif' ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #ef4444, #dc2626)' }}; color: white;">
                             {{ client.statutCompte|upper }}
                         </span>
                     </div>
 
                     <div class="client-actions">
+                        <a href="{{ path('app_responsable_client_edit', {id: client.id}) }}" class="btn-action btn-edit">
+                            <i class="fas fa-edit"></i> Éditer
+                        </a>
+
                         {% if client.statutCompte == 'actif' and 'ROLE_CLIENT' in client.roles %}
-                            <form action="{{ path('app_responsable_client_suspend', {id: client.id}) }}" method="post">
+                            <form action="{{ path('app_responsable_client_suspend', {id: client.id}) }}" method="post" style="display: inline;">
                                 <input type="hidden" name="_token" value="{{ csrf_token('suspend' ~ client.id) }}">
-                                <button type="submit" class="btn btn-outline-danger btn-sm"
-                                        onclick="return confirm('Êtes-vous sûr de vouloir suspendre {{ client.prenom }} {{ client.nom }} ?')">
+                                <button type="submit" class="btn-action btn-suspend"
+                                        onclick="return confirm('⚠️ Êtes-vous sûr de vouloir suspendre {{ client.prenom }} {{ client.nom }} ?')">
                                     <i class="fas fa-ban"></i> Suspendre
                                 </button>
                             </form>
 
                         {% elseif client.statutCompte == 'suspendu' and 'ROLE_CLIENT' in client.roles %}
-                            <form action="{{ path('app_responsable_client_activate', {id: client.id}) }}" method="post">
+                            <form action="{{ path('app_responsable_client_activate', {id: client.id}) }}" method="post" style="display: inline;">
                                 <input type="hidden" name="_token" value="{{ csrf_token('activate' ~ client.id) }}">
-                                <button type="submit" class="btn btn-outline-success btn-sm"
-                                        onclick="return confirm('Réactiver {{ client.prenom }} {{ client.nom }} ?')">
-                                    <i class="fas fa-check"></i> Réactiver
+                                <button type="submit" class="btn-action btn-activate"
+                                        onclick="return confirm('✅ Réactiver le compte de {{ client.prenom }} {{ client.nom }} ?')">
+                                    <i class="fas fa-check-circle"></i> Réactiver
                                 </button>
                             </form>
 
                         {% else %}
-                            <button class="btn btn-sm btn-light" disabled>
+                            <button class="btn-action btn-protected" disabled>
                                 <i class="fas fa-shield-alt"></i> Protégé
                             </button>
                         {% endif %}

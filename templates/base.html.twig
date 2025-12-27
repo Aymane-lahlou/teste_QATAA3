@@ -305,11 +305,245 @@
             font-size: 1.5rem;
             color: #64748b;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle:active {
+            transform: scale(0.95);
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1200px) {
+            .brand-text { font-size: 1.2rem; }
+            .nav-link-modern { padding: 0.5rem 0.9rem; font-size: 0.9rem; }
         }
 
         @media (max-width: 991px) {
             .nav-links, .nav-actions { display: none; }
             .mobile-menu-toggle { display: block; }
+            
+            .navbar-modern {
+                padding: 0.75rem 0;
+            }
+
+            .brand-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .brand-text {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            * { margin: 0; padding: 0; }
+            
+            body { font-size: 14px; }
+
+            .navbar-modern {
+                padding: 0.5rem 0;
+            }
+
+            .container {
+                padding: 0 12px;
+            }
+
+            .brand-logo {
+                gap: 6px;
+            }
+
+            .brand-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+
+            .brand-text {
+                font-size: 1rem;
+            }
+
+            .brand-domain {
+                display: none;
+            }
+
+            /* Chat button adjustments */
+            .chat-button {
+                width: 48px;
+                height: 48px;
+                right: 16px;
+                bottom: 16px;
+            }
+
+            .chat-popup {
+                width: 100%;
+                max-width: 100%;
+                right: 0;
+                bottom: 0;
+                border-radius: 20px 20px 0 0;
+                max-height: 70vh;
+                left: 0;
+            }
+
+            .chat-popup-body {
+                height: 250px;
+            }
+
+            /* Forms */
+            .form-input {
+                padding: 14px 16px;
+                font-size: 16px; /* Prevent zoom on iOS */
+            }
+
+            .btn-modern-primary,
+            .btn-modern-outline {
+                width: 100%;
+                padding: 14px;
+                font-size: 1rem;
+            }
+
+            /* Footer improvements */
+            .footer-custom {
+                padding: 40px 0 20px;
+            }
+
+            .footer-custom .row {
+                margin-bottom: 30px;
+            }
+
+            .footer-brand {
+                font-size: 1.5rem;
+            }
+
+            .footer-title {
+                margin-bottom: 1rem;
+            }
+
+            .social-links {
+                justify-content: flex-start;
+            }
+
+            .app-download-buttons {
+                flex-direction: column;
+            }
+
+            .app-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            html { font-size: 13px; }
+
+            .navbar-modern {
+                padding: 0.4rem 0;
+            }
+
+            .container {
+                padding: 0 8px;
+            }
+
+            .brand-text {
+                font-size: 0.95rem;
+            }
+
+            /* Typography */
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            h3 {
+                font-size: 1.1rem;
+            }
+
+            p {
+                line-height: 1.6;
+            }
+
+            /* Forms */
+            .form-label {
+                font-size: 0.9rem;
+            }
+
+            .form-input {
+                padding: 12px 14px;
+                font-size: 16px;
+            }
+
+            /* Buttons */
+            .btn-reset,
+            .btn-modern-primary,
+            .btn-modern-outline {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+
+            /* Spacing adjustments */
+            .form-group {
+                margin-bottom: 16px;
+            }
+
+            /* Chat */
+            .chat-button {
+                width: 44px;
+                height: 44px;
+                right: 12px;
+                bottom: 12px;
+            }
+
+            .chat-popup {
+                max-height: 80vh;
+            }
+
+            .chat-popup-body {
+                height: 200px;
+            }
+
+            .chat-quick-suggestions {
+                max-height: 70px;
+            }
+
+            /* Images */
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            /* Tables */
+            table {
+                font-size: 0.9rem;
+            }
+
+            /* Grid adjustments */
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 360px) {
+            html { font-size: 12px; }
+
+            .brand-text {
+                font-size: 0.9rem;
+            }
+
+            .container {
+                padding: 0 6px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-input {
+                padding: 10px 12px;
+                font-size: 16px;
+            }
         }
 
         /* FOOTER */
@@ -430,47 +664,121 @@
             z-index: 1100;
         }
         .chat-popup-header {
-            padding: 0.9rem 1rem;
+            padding: 1rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-radius: 20px 20px 0 0;
         }
         .chat-popup-body {
-            padding: 0.9rem;
-            height: 260px;
+            padding: 1rem;
+            height: 220px;
             overflow-y: auto;
             background: #f8fafc;
             font-size: 0.9rem;
+        }
+        .chat-popup-body::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-popup-body::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        .chat-popup-body::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+        .chat-quick-suggestions {
+            padding: 0.75rem;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+        .chat-suggestion-btn {
+            padding: 0.5rem 1rem;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            color: #475569;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+        .chat-suggestion-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
         }
         .chat-popup-footer {
             padding: 0.75rem;
             background: #ffffff;
             border-top: 1px solid #e2e8f0;
             display: flex;
-            gap: 0.4rem;
+            gap: 0.5rem;
+            border-radius: 0 0 20px 20px;
         }
         .chat-input {
             flex: 1;
-            border-radius: 999px;
+            border-radius: 20px;
             border: 1px solid #e2e8f0;
-            padding: 0.45rem 0.75rem;
+            padding: 0.6rem 1rem;
             font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        .chat-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         .chat-send-btn {
-            border-radius: 999px;
+            border-radius: 50%;
             border: none;
-            background: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
-            padding: 0.45rem 0.9rem;
-            font-size: 0.85rem;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        .chat-send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
         .chat-message {
-            margin-bottom: 0.45rem;
+            margin-bottom: 0.8rem;
+            padding: 0.6rem 0.9rem;
+            border-radius: 12px;
+            max-width: 85%;
+            word-wrap: break-word;
+            line-height: 1.4;
         }
-        .chat-message.user { text-align: right; color: #0f172a; }
-        .chat-message.bot { text-align: left; color: #475569; }
+        .chat-message.user {
+            text-align: right;
+            color: #ffffff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-message.bot {
+            text-align: left;
+            color: #1e293b;
+            background: #e2e8f0;
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
     </style>
     {% endblock %}
 </head>
@@ -515,6 +823,9 @@
                             </a>
                             <a href="{{ path('app_events', {categorie: 'Formation'}) }}" class="dropdown-item-modern">
                                 <i class="fas fa-graduation-cap" style="color:#ef4444;"></i> Formations
+                            </a>
+                            <a href="{{ path('app_events', {categorie: 'Sport'}) }}" class="dropdown-item-modern">
+                                <i class="fas fa-football-ball" style="color:#8b5cf6;"></i> Sports
                             </a>
                         </div>
                     </li>
@@ -673,19 +984,35 @@
 
     <div class="chat-popup" id="chatPopup">
         <div class="chat-popup-header">
-            <span>Assistant Qataa3.ma</span>
+            <div>
+                <span style="font-weight: 600;">Assistant Qataa3.ma</span>
+                <div style="font-size: 0.8rem; opacity: 0.8;">En ligne 🟢</div>
+            </div>
             <button type="button" class="btn btn-sm btn-light" id="chatClose">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="chat-popup-body" id="chatMessages">
             <div class="chat-message bot">
-                Salut 👋 Je peux t'aider à trouver un événement (concert, festival, conférence…).
+                Salut 👋 Je suis ton assistant pour trouver les meilleurs événements !
+            </div>
+            <div class="chat-message bot">
+                Que cherches-tu ? Concerts, festivals, spectacles... ?
             </div>
         </div>
+        <div class="chat-quick-suggestions" id="chatSuggestions">
+            <button class="chat-suggestion-btn" data-query="concerts">🎵 Concerts</button>
+            <button class="chat-suggestion-btn" data-query="festivals">🎪 Festivals</button>
+            <button class="chat-suggestion-btn" data-query="spectacles">🎭 Spectacles</button>
+            <button class="chat-suggestion-btn" data-query="formations">📚 Formations</button>
+            <button class="chat-suggestion-btn" data-query="sports">⚽ Sports</button>
+            <button class="chat-suggestion-btn" data-query="tous les événements">📅 Tous</button>
+        </div>
         <div class="chat-popup-footer">
-            <input type="text" id="chatInput" class="chat-input" placeholder="Pose ta question...">
-            <button class="chat-send-btn" id="chatSend">Envoyer</button>
+            <input type="text" id="chatInput" class="chat-input" placeholder="Tape ta question...">
+            <button class="chat-send-btn" id="chatSend" title="Envoyer">
+                <i class="fas fa-paper-plane"></i>
+            </button>
         </div>
     </div>
 
@@ -697,27 +1024,49 @@
         const chatInput  = document.getElementById('chatInput');
         const chatSend   = document.getElementById('chatSend');
         const chatMessages = document.getElementById('chatMessages');
+        const chatSuggestions = document.getElementById('chatSuggestions');
+        const suggestionButtons = document.querySelectorAll('.chat-suggestion-btn');
 
         function toggleChat(show) {
-            chatPopup.style.display = show ? 'flex' : 'none';
+            if (chatPopup) {
+                chatPopup.style.display = show ? 'flex' : 'none';
+                if (show && chatInput) chatInput.focus();
+            }
         }
 
-        chatToggle?.addEventListener('click', () => toggleChat(true));
-        chatClose?.addEventListener('click', () => toggleChat(false));
+        if (chatToggle) chatToggle.addEventListener('click', () => toggleChat(true));
+        if (chatClose) chatClose.addEventListener('click', () => toggleChat(false));
 
         function addMessage(text, who) {
             const div = document.createElement('div');
             div.className = 'chat-message ' + who;
-            div.textContent = text;
-            chatMessages.appendChild(div);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Formater le texte avec support de **bold**
+            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            text = text.replace(/\n/g, '<br>');
+            
+            div.innerHTML = text;
+            if (chatMessages) {
+                chatMessages.appendChild(div);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
         }
 
-        async function sendMessage() {
-            const text = chatInput.value.trim();
+        function showSuggestions(show) {
+            if (chatSuggestions) {
+                chatSuggestions.style.display = show ? 'flex' : 'none';
+            }
+        }
+
+        async function sendMessage(message = null) {
+            const text = message || (chatInput?.value?.trim());
             if (!text) return;
+            
             addMessage(text, 'user');
-            chatInput.value = '';
+            if (chatInput) chatInput.value = '';
+            
+            // Masquer les suggestions quand l'utilisateur envoie un message
+            showSuggestions(false);
 
             try {
                 const response = await fetch('{{ path('app_chat_api') }}', {
@@ -725,19 +1074,46 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: text })
                 });
+                
+                if (!response.ok) {
+                    throw new Error('Erreur serveur');
+                }
+                
                 const data = await response.json();
-                addMessage(data.reply ?? 'Désolé, je n'ai pas compris.', 'bot');
+                addMessage(data.reply || 'Désolé, je n\'ai pas compris.', 'bot');
+                
+                // Afficher les suggestions si nécessaire
+                if (data.suggestions) {
+                    setTimeout(() => showSuggestions(true), 300);
+                }
             } catch (e) {
-                addMessage('Erreur de connexion au chatbot.', 'bot');
+                console.error('Erreur chatbot:', e);
+                addMessage('❌ Erreur de connexion. Réessayez plus tard.', 'bot');
+                setTimeout(() => showSuggestions(true), 300);
             }
         }
 
-        chatSend?.addEventListener('click', sendMessage);
-        chatInput?.addEventListener('keydown', e => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                sendMessage();
-            }
+        // Boutons rapides de suggestion
+        suggestionButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const query = btn.getAttribute('data-query');
+                sendMessage(query);
+            });
+        });
+
+        if (chatSend) chatSend.addEventListener('click', () => sendMessage());
+        if (chatInput) {
+            chatInput.addEventListener('keydown', e => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
+
+        // Afficher les suggestions au chargement
+        window.addEventListener('load', () => {
+            showSuggestions(true);
         });
     </script>
     {% endblock %}

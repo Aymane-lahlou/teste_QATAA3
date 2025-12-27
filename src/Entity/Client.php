@@ -41,6 +41,21 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')]
     private array $roles = ['ROLE_CLIENT'];
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isEmailVerified = false;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $emailVerificationToken = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $emailVerifiedAt = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $passwordResetToken = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $passwordResetRequestedAt = null;
+
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Commande::class)]
     private Collection $commandes;
 
@@ -165,5 +180,53 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // Nettoyer les données sensibles temporaires
+    }
+
+    // Getters et Setters pour la sécurité
+    public function isEmailVerified(): bool
+    {
+        return $this->isEmailVerified;
+    }
+
+    public function setEmailVerified(bool $isVerified): self
+    {
+        $this->isEmailVerified = $isVerified;
+        if ($isVerified) {
+            $this->emailVerifiedAt = new \DateTimeImmutable();
+        }
+        return $this;
+    }
+
+    public function getEmailVerificationToken(): ?string
+    {
+        return $this->emailVerificationToken;
+    }
+
+    public function setEmailVerificationToken(?string $token): self
+    {
+        $this->emailVerificationToken = $token;
+        return $this;
+    }
+
+    public function getPasswordResetToken(): ?string
+    {
+        return $this->passwordResetToken;
+    }
+
+    public function setPasswordResetToken(?string $token): self
+    {
+        $this->passwordResetToken = $token;
+        return $this;
+    }
+
+    public function getPasswordResetRequestedAt(): ?\DateTimeImmutable
+    {
+        return $this->passwordResetRequestedAt;
+    }
+
+    public function setPasswordResetRequestedAt(?\DateTimeImmutable $requestedAt): self
+    {
+        $this->passwordResetRequestedAt = $requestedAt;
+        return $this;
     }
 }

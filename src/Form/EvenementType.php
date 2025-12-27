@@ -43,6 +43,7 @@ class EvenementType extends AbstractType
                     'Festival' => 'Festival',
                     'Spectacle' => 'Spectacle',
                     'Formation' => 'Formation',
+                    'Sport' => 'Sport',
                 ],
                 'attr' => ['class' => 'form-control'],
             ])

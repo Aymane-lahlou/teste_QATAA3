@@ -939,9 +939,9 @@
                         </a>
                     </div>
                     <ul class="footer-links mt-4">
-                        <li><a href="#">Mentions légales</a></li>
-                        <li><a href="#">Conditions générales</a></li>
-                        <li><a href="#">Politique de confidentialité</a></li>
+                        <li><a href="{{ path('app_legal_mentions') }}">Mentions légales</a></li>
+                        <li><a href="{{ path('app_legal_conditions') }}">Conditions générales</a></li>
+                        <li><a href="{{ path('app_legal_privacy') }}">Politique de confidentialité</a></li>
                     </ul>
                 </div>
             </div>
@@ -961,27 +961,32 @@
     <div class="chat-popup" id="chatPopup">
         <div class="chat-popup-header">
             <div>
-                <span style="font-weight: 600;">Assistant Qataa3.ma</span>
+                <span style="font-weight: 600;">🤖 Assistant Qataa3.ma</span>
                 <div style="font-size: 0.8rem; opacity: 0.8;">En ligne 🟢</div>
             </div>
-            <button type="button" class="btn btn-sm btn-light" id="chatClose">
-                <i class="fas fa-times"></i>
-            </button>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <select id="chatLanguage" style="padding: 4px 8px; border-radius: 4px; border: 1px solid #ccc; font-size: 0.9rem; cursor: pointer;">
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="ar">🇸🇦 العربية</option>
+                    <option value="drj">🇲🇦 الدارجة</option>
+                </select>
+                <button type="button" class="btn btn-sm btn-light" id="chatClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
         <div class="chat-popup-body" id="chatMessages">
             <div class="chat-message bot">
-                Salut 👋 Je suis ton assistant pour trouver les meilleurs événements !
-            </div>
-            <div class="chat-message bot">
-                Que cherches-tu ? Concerts, festivals, spectacles... ?
+                Bonjour 👋 Je suis ton assistant pour trouver les meilleurs événements !
             </div>
         </div>
         <div class="chat-quick-suggestions" id="chatSuggestions">
+            <button class="chat-suggestion-btn" data-query="bonjour">👋 Bonjour</button>
+            <button class="chat-suggestion-btn" data-query="comment je peux vous aider">❓ Aide</button>
+            <button class="chat-suggestion-btn" data-query="combien de tickets restent">🎫 Tickets</button>
             <button class="chat-suggestion-btn" data-query="concerts">🎵 Concerts</button>
             <button class="chat-suggestion-btn" data-query="festivals">🎪 Festivals</button>
             <button class="chat-suggestion-btn" data-query="spectacles">🎭 Spectacles</button>
-            <button class="chat-suggestion-btn" data-query="formations">📚 Formations</button>
-            <button class="chat-suggestion-btn" data-query="sports">⚽ Sports</button>
             <button class="chat-suggestion-btn" data-query="tous les événements">📅 Tous</button>
         </div>
         <div class="chat-popup-footer">
@@ -994,6 +999,52 @@
 
     {% block javascripts %}
     <script>
+        // Configuration multilingue
+        const translations = {
+            fr: {
+                placeholder: "Tape ta question...",
+                error: "❌ Erreur de connexion. Réessayez plus tard.",
+                greeting: "Bonjour 👋 Je suis ton assistant pour trouver les meilleurs événements !",
+                buttons: {
+                    hello: "👋 Bonjour",
+                    help: "❓ Aide",
+                    tickets: "🎫 Tickets",
+                    concerts: "🎵 Concerts",
+                    festivals: "🎪 Festivals",
+                    spectacles: "🎭 Spectacles",
+                    all: "📅 Tous"
+                }
+            },
+            ar: {
+                placeholder: "اكتب سؤالك...",
+                error: "❌ خطأ في الاتصال. حاول لاحقا.",
+                greeting: "السلام عليكم 👋 أنا مساعدك الافتراضي لإيجاد أفضل الفعاليات!",
+                buttons: {
+                    hello: "👋 السلام",
+                    help: "❓ ساعدني",
+                    tickets: "🎫 التذاكر",
+                    concerts: "🎵 الحفلات",
+                    festivals: "🎪 المهرجانات",
+                    spectacles: "🎭 العروض",
+                    all: "📅 الكل"
+                }
+            },
+            drj: {
+                placeholder: "اكتب السؤال ديالك...",
+                error: "❌ مشكلة في الاتصال. حاول فيما بعد.",
+                greeting: "سلام 👋 أنا مساعدك في Qataa3.ma!",
+                buttons: {
+                    hello: "👋 سلام",
+                    help: "❓ ساعدني",
+                    tickets: "🎫 التذاكر",
+                    concerts: "🎵 الحفلات",
+                    festivals: "🎪 الفرق",
+                    spectacles: "🎭 العروض",
+                    all: "📅 الكل"
+                }
+            }
+        };
+
         const chatToggle = document.getElementById('chatToggle');
         const chatPopup  = document.getElementById('chatPopup');
         const chatClose  = document.getElementById('chatClose');
@@ -1002,6 +1053,25 @@
         const chatMessages = document.getElementById('chatMessages');
         const chatSuggestions = document.getElementById('chatSuggestions');
         const suggestionButtons = document.querySelectorAll('.chat-suggestion-btn');
+        const chatLanguage = document.getElementById('chatLanguage');
+        
+        let currentLanguage = localStorage.getItem('chatLanguage') || 'fr';
+        let selectedLanguage = currentLanguage;
+
+        // Initialiser la langue sauvegardée
+        if (chatLanguage) {
+            chatLanguage.value = currentLanguage;
+        }
+
+        function updatePlaceholder() {
+            const trans = translations[selectedLanguage];
+            if (chatInput) {
+                chatInput.placeholder = trans.placeholder;
+            }
+            if (chatLanguage) {
+                chatLanguage.value = selectedLanguage;
+            }
+        }
 
         function toggleChat(show) {
             if (chatPopup) {
@@ -1012,6 +1082,17 @@
 
         if (chatToggle) chatToggle.addEventListener('click', () => toggleChat(true));
         if (chatClose) chatClose.addEventListener('click', () => toggleChat(false));
+
+        // Changer la langue
+        if (chatLanguage) {
+            chatLanguage.addEventListener('change', (e) => {
+                selectedLanguage = e.target.value;
+                localStorage.setItem('chatLanguage', selectedLanguage);
+                updatePlaceholder();
+                // Afficher un message de bienvenue dans la nouvelle langue
+                addMessage(translations[selectedLanguage].greeting, 'bot');
+            });
+        }
 
         function addMessage(text, who) {
             const div = document.createElement('div');
@@ -1048,7 +1129,10 @@
                 const response = await fetch('{{ path('app_chat_api') }}', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: text })
+                    body: JSON.stringify({ 
+                        message: text,
+                        language: selectedLanguage
+                    })
                 });
                 
                 if (!response.ok) {
@@ -1064,7 +1148,7 @@
                 }
             } catch (e) {
                 console.error('Erreur chatbot:', e);
-                addMessage('❌ Erreur de connexion. Réessayez plus tard.', 'bot');
+                addMessage(translations[selectedLanguage].error, 'bot');
                 setTimeout(() => showSuggestions(true), 300);
             }
         }
@@ -1087,7 +1171,8 @@
             });
         }
 
-        // Afficher les suggestions au chargement
+        // Initialiser
+        updatePlaceholder();
         window.addEventListener('load', () => {
             showSuggestions(true);
         });

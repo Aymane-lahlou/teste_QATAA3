@@ -1,0 +1,1052 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Blog - Qataa3.ma{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .blog-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 80px 0 40px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .blog-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,101.3C1248,85,1344,75,1392,69.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .blog-hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+        }
+
+        .blog-hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+        }
+
+        .blog-hero p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .blog-container {
+            max-width: 1400px;
+            margin: 60px auto 80px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ✨ SECTION CATÉGORIES ULTRA-MODERNE */
+        .blog-categories-wrapper {
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 3rem 2.5rem;
+            box-shadow: 
+                0 20px 60px rgba(102, 126, 234, 0.08),
+                0 0 0 1px rgba(102, 126, 234, 0.05);
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-categories-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .blog-categories-wrapper::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(118, 75, 162, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .categories-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .categories-title {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #667eea;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 0.6rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .categories-title::before,
+        .categories-title::after {
+            content: '';
+            width: 30px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+        }
+
+        .categories-subtitle {
+            font-size: 1rem;
+            color: #64748b;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .blog-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-chip {
+            position: relative;
+            padding: 1.5rem 1.2rem;
+            background: #ffffff;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 2px solid rgba(102, 126, 234, 0.08);
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            color: #475569;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            overflow: hidden;
+        }
+
+        .category-chip::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.03) 100%);
+            transition: left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .category-chip:hover::before {
+            left: 0;
+        }
+
+        .category-chip:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 
+                0 20px 40px rgba(102, 126, 234, 0.15),
+                0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: rgba(102, 126, 234, 0.2);
+        }
+
+        .category-chip.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 
+                0 20px 50px rgba(102, 126, 234, 0.35),
+                0 0 0 4px rgba(102, 126, 234, 0.15);
+        }
+
+        .category-chip.active::before {
+            display: none;
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            display: block;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: grayscale(0.4) brightness(1.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-chip:hover .category-icon {
+            transform: scale(1.2) rotate(-8deg);
+            filter: grayscale(0) brightness(1);
+        }
+
+        .category-chip.active .category-icon {
+            transform: scale(1.15) rotate(-5deg);
+            filter: grayscale(0) brightness(1.1) drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+        }
+
+        .category-label {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-count {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+            color: #667eea;
+            min-width: 28px;
+            height: 28px;
+            padding: 0 8px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .category-chip:hover .category-count {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.25), rgba(118, 75, 162, 0.25));
+            transform: scale(1.15) rotate(12deg);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .category-chip.active .category-count {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1) rotate(8deg);
+        }
+
+        /* Animation au chargement */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .category-chip {
+            animation: slideInUp 0.6s ease-out backwards;
+        }
+
+        .category-chip:nth-child(1) { animation-delay: 0.1s; }
+        .category-chip:nth-child(2) { animation-delay: 0.15s; }
+        .category-chip:nth-child(3) { animation-delay: 0.2s; }
+        .category-chip:nth-child(4) { animation-delay: 0.25s; }
+        .category-chip:nth-child(5) { animation-delay: 0.3s; }
+        .category-chip:nth-child(6) { animation-delay: 0.35s; }
+        .category-chip:nth-child(7) { animation-delay: 0.4s; }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .blog-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .blog-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .blog-card-image {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .blog-card:hover .blog-card-image {
+            transform: scale(1.08);
+        }
+
+        .blog-card-image-wrapper {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .blog-card-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.95);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #667eea;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .blog-card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .blog-card-meta i {
+            color: #667eea;
+        }
+
+        .blog-card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .blog-card-excerpt {
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .blog-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .blog-card-author {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .author-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        .read-more {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s ease;
+        }
+
+        .blog-card:hover .read-more {
+            gap: 0.8rem;
+        }
+
+        /* Featured Article */
+        .featured-article {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.15);
+            margin-bottom: 3rem;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            position: relative;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            z-index: 10;
+        }
+
+        .featured-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            min-height: 400px;
+        }
+
+        .featured-content {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .featured-category {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .featured-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .featured-excerpt {
+            color: #64748b;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .featured-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            align-self: flex-start;
+        }
+
+        .featured-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        /* Message "Aucun résultat" */
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #64748b;
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        .no-results h3 {
+            font-size: 1.5rem;
+            color: #475569;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .blog-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+
+            .blog-categories {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            .featured-article {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-image {
+                min-height: 300px;
+            }
+
+            .featured-content {
+                padding: 2rem;
+            }
+
+            .featured-title {
+                font-size: 1.8rem;
+            }
+
+            .blog-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .blog-container {
+                margin-top: 40px;
+            }
+
+            .blog-categories {
+                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            }
+
+            .blog-categories-wrapper {
+                padding: 2.5rem 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .blog-hero {
+                padding: 60px 0 30px;
+                margin-top: 10px;
+            }
+
+            .blog-hero h1 {
+                font-size: 2rem;
+            }
+
+            .blog-hero p {
+                font-size: 1rem;
+            }
+
+            .blog-container {
+                margin-top: 30px;
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .blog-categories-wrapper {
+                padding: 2rem 1.5rem;
+                border-radius: 25px;
+            }
+
+            .categories-header {
+                margin-bottom: 2rem;
+            }
+
+            .categories-title {
+                font-size: 0.75rem;
+                letter-spacing: 2px;
+            }
+
+            .categories-title::before,
+            .categories-title::after {
+                width: 20px;
+            }
+
+            .blog-categories {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .category-chip {
+                padding: 1.3rem 1rem;
+                border-radius: 16px;
+            }
+
+            .category-icon {
+                font-size: 2rem;
+            }
+
+            .category-label {
+                font-size: 0.85rem;
+            }
+
+            .category-count {
+                width: 24px;
+                height: 24px;
+                font-size: 0.7rem;
+                top: 10px;
+                right: 10px;
+                min-width: 24px;
+            }
+
+            .featured-content {
+                padding: 1.5rem;
+            }
+
+            .featured-title {
+                font-size: 1.5rem;
+            }
+
+            .featured-excerpt {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .blog-container {
+                padding: 0 15px;
+                margin-top: 20px;
+            }
+
+            .blog-card-title {
+                font-size: 1.2rem;
+            }
+
+            .blog-categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .category-chip {
+                padding: 1.2rem 0.8rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<!-- Hero Section -->
+<section class="blog-hero">
+    <div class="blog-hero-content">
+        <h1>📰 Blog Qataa3.ma</h1>
+        <p>Découvrez nos actualités, conseils et tendances du monde événementiel au Maroc</p>
+    </div>
+</section>
+
+<!-- Blog Container -->
+<div class="blog-container">
+    <!-- ✨ Catégories Ultra-Modernes -->
+    <div class="blog-categories-wrapper">
+        <div class="categories-header">
+            <div class="categories-title">🎯 FILTRER PAR CATÉGORIE</div>
+            <div class="categories-subtitle">Explorez nos articles par thème</div>
+        </div>
+        <div class="blog-categories" id="categoryFilters">
+            <span class="category-chip active" data-category="all">
+                <span class="category-count">9</span>
+                <span class="category-icon">🌟</span>
+                <span class="category-label">Tous</span>
+            </span>
+            <span class="category-chip" data-category="concerts">
+                <span class="category-count">1</span>
+                <span class="category-icon">🎵</span>
+                <span class="category-label">Concerts</span>
+            </span>
+            <span class="category-chip" data-category="festivals">
+                <span class="category-count">2</span>
+                <span class="category-icon">🎪</span>
+                <span class="category-label">Festivals</span>
+            </span>
+            <span class="category-chip" data-category="spectacles">
+                <span class="category-count">1</span>
+                <span class="category-icon">🎭</span>
+                <span class="category-label">Spectacles</span>
+            </span>
+            <span class="category-chip" data-category="sports">
+                <span class="category-count">1</span>
+                <span class="category-icon">⚽</span>
+                <span class="category-label">Sports</span>
+            </span>
+            <span class="category-chip" data-category="conseils">
+                <span class="category-count">2</span>
+                <span class="category-icon">💡</span>
+                <span class="category-label">Conseils</span>
+            </span>
+            <span class="category-chip" data-category="actualites">
+                <span class="category-count">2</span>
+                <span class="category-icon">📰</span>
+                <span class="category-label">Actualités</span>
+            </span>
+        </div>
+    </div>
+
+    <!-- Featured Article -->
+    <article class="featured-article" data-category="festivals">
+        <div class="featured-badge">
+            ⭐ Article à la une
+        </div>
+        <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&h=600&fit=crop" alt="Festival 2026" class="featured-image">
+        <div class="featured-content">
+            <div class="featured-category">🎪 Festivals</div>
+            <h2 class="featured-title">Les Festivals Incontournables de 2026 au Maroc</h2>
+            <p class="featured-excerpt">
+                Découvrez notre sélection exclusive des événements culturels majeurs qui animeront le royaume cette année. De Mawazine aux festivals émergents, préparez-vous à vivre des expériences inoubliables.
+            </p>
+            <a href="#" class="featured-btn">
+                Lire l'article <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </article>
+
+    <!-- Blog Grid -->
+    <div class="blog-grid" id="blogGrid">
+        <!-- Article 1 -->
+        <a href="#" class="blog-card" data-category="conseils">
+            <div class="blog-card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&h=300&fit=crop" alt="Acheter des billets" class="blog-card-image">
+                <span class="blog-card-badge">💡 Guide</span>
+            </div>
+            <div class="blog-card-content">
+                <div class="blog-card-meta">
+                    <span><i class="far fa-calendar"></i> 2 Jan 2026</span>
+                    <span><i class="far fa-clock"></i> 5 min</span>
+                </div>
+                <h3 class="blog-card-title">Comment acheter vos billets en toute sécurité sur Qataa3.ma</h3>
+                <p class="blog-card-excerpt">
+                    Suivez notre guide complet pour réserver vos places en quelques clics et profiter d'une expérience d'achat simple et sécurisée.
+                </p>
+                <div class="blog-card-footer">
+                    <div class="blog-card-author">
+                        <div class="author-avatar">A</div>
+                        <span class="author-name">Ahmed Bennani</span>
+                    </div>
+                    <span class="read-more">
+                        Lire plus <i class="fas fa-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Article 2 -->
+        <a href="#" class="blog-card" data-category="concerts">
+            <div class="blog-card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&h=300&fit=crop" alt="Concerts" class="blog-card-image">
+                <span class="blog-card-badge">🎵 Concerts</span>
+            </div>
+            <div class="blog-card-content">
+                <div class="blog-card-meta">
+                    <span><i class="far fa-calendar"></i> 29 Déc 2025</span>
+                    <span><i class="far fa-clock"></i> 7 min</span>
+                </div>
+                <h3 class="blog-card-title">Les nouveautés de la saison musicale 2026</h3>
+                <p class="blog-card-excerpt">
+                    Artistes internationaux, têtes d'affiche marocaines... Découvrez les concerts à ne pas manquer cette année.
+                </p>
+                <div class="blog-card-footer">
+                    <div class="blog-card-author">
+                        <div class="author-avatar">S</div>
+                        <span class="author-name">Sara El Amrani</span>
+                    </div>
+                    <span class="read-more">
+                        Lire plus <i class="fas fa-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Article 3 -->
+        <a href="#" class="blog-card" data-category="conseils">
+            <div class="blog-card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=500&h=300&fit=crop" alt="Organisation" class="blog-card-image">
+                <span class="blog-card-badge">📋 Pro</span>
+            </div>
+            <div class="blog-card-content">
+                <div class="blog-card-meta">
+                    <span><i class="far fa-calendar"></i> 25 Déc 2025</span>
+                    <span><i class="far fa-clock"></i> 10 min</span>
+                </div>
+                <h3 class="blog-card-title">Organisateurs : comment vendre vos billets sur Qataa3.ma</h3>
+                <p class="blog-card-excerpt">
+                    Guide complet pour les organisateurs souhaitant digitaliser la vente de leurs billets et maximiser leur audience.
+                </p>
+                <div class="blog-card-footer">
+                    <div class="blog-card-author">
+                        <div class="author-avatar">Y</div>
+                        <span class="author-name">Youssef Tazi</span>
+                    </div>
+                    <span class="read-more">
+                        Lire plus <i class="fas fa-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Article 4 -->
+        <a href="#" class="blog-card" data-category="actualites">
+            <div class="blog-card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=500&h=300&fit=crop" alt="Famille" class="blog-card-image">
+                <span class="blog-card-badge">👨‍👩‍👧 Famille</span>
+            </div>
+            <div class="blog-card-content">
+                <div class="blog-card-meta">
+                    <span><i class="far fa-calendar"></i> 20 Déc 2025</span>
+                    <span><i class="far fa-clock"></i> 6 min</span>
+                </div>
+                <h3 class="blog-card-title">Top 10 des événements pour toute la famille</h3>
+                <p class="blog-card-excerpt">
+                    Spectacles, cirques, animations... Découvrez notre sélection d'événements familiaux pour des moments inoubliables.
+                </p>
+                <div class="blog-card-footer">
+                    <div class="blog-card-author">
+                        <div class="author-avatar">L</div>
+                        <span class="author-name">Laila Mansouri</span>
+                    </div>
+                    <span class="read-more">
+                        Lire plus <i class="fas fa-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Article 5 -->
+        <a href="#" class="blog-card" data-category="actualites">
+            <div class="blog-card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&h=300&fit=crop" alt="Digital" class="blog-card-image">
+                <span class="blog-card-badge">🚀 Tendances</span>
+            </div>
+            <div class="blog-card-content">
+                <div class="blog-card-meta">
+                    <span><i class="far fa-calendar"></i> 15 Déc 2025</span>
+                    <span><i class="far fa-clock"></i> 8 min</span>
+                </div>
+                <h3 class="blog-card-title">La révolution de la billetterie digitale au Maroc</h3>
+                <p class="blog-card-excerpt">
+                    QR codes, e-tickets, paiement mobile... Comment la technologie transforme l'accès aux événements culturels.
+                </p>
+                <div class="blog-card-footer">
+                    <div class="blog-card-author">
+                        <div class="author-avatar">K</div>
+                        <span class="author-name">Karim Benjelloun</span>
+                    </div>
+                    <span class="read-more">
+                        Lire plus <i class="fas fa-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Article 6 -->
+        <a href="#" class="blog-card" data-category="sports">
+            <div class="blog-card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1551958219-acbc608c6377?w=500&h=300&fit=crop" alt="Sport" class="blog-card-image">
+                <span class="blog-card-badge">⚽ Sports</span>
+            </div>
+            <div class="blog-card-content">
+                <div class="blog-card-meta">
+                    <span><i class="far fa-calendar"></i> 10 Déc 2025</span>
+                    <span><i class="far fa-clock"></i> 9 min</span>
+                </div>
+                <h3 class="blog-card-title">Calendrier des grands événements sportifs 2026</h3>
+                <p class="blog-card-excerpt">
+                    Football, marathon, courses automobiles... Ne manquez aucun rendez-vous sportif majeur de l'année.
+                </p>
+                <div class="blog-card-footer">
+                    <div class="blog-card-author">
+                        <div class="author-avatar">M</div>
+                        <span class="author-name">Mehdi Rachidi</span>
+                    </div>
+                    <span class="read-more">
+                        Lire plus <i class="fas fa-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Article 7 -->
+        <a href="#" class="blog-card" data-category="spectacles">
+            <div class="blog-card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1503095396549-807759245b35?w=500&h=300&fit=crop" alt="Théâtre" class="blog-card-image">
+                <span class="blog-card-badge">🎭 Spectacles</span>
+            </div>
+            <div class="blog-card-content">
+                <div class="blog-card-meta">
+                    <span><i class="far fa-calendar"></i> 5 Déc 2025</span>
+                    <span><i class="far fa-clock"></i> 6 min</span>
+                </div>
+                <h3 class="blog-card-title">Les meilleurs spectacles de théâtre 2026</h3>
+                <p class="blog-card-excerpt">
+                    Pièces classiques et contemporaines, one-man shows... Découvrez la programmation théâtrale de l'année.
+                </p>
+                <div class="blog-card-footer">
+                    <div class="blog-card-author">
+                        <div class="author-avatar">N</div>
+                        <span class="author-name">Nadia Alami</span>
+                    </div>
+                    <span class="read-more">
+                        Lire plus <i class="fas fa-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Article 8 -->
+        <a href="#" class="blog-card" data-category="festivals">
+            <div class="blog-card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=500&h=300&fit=crop" alt="Gnaoua" class="blog-card-image">
+                <span class="blog-card-badge">🎪 Festivals</span>
+            </div>
+            <div class="blog-card-content">
+                <div class="blog-card-meta">
+                    <span><i class="far fa-calendar"></i> 1 Déc 2025</span>
+                    <span><i class="far fa-clock"></i> 8 min</span>
+                </div>
+                <h3 class="blog-card-title">Festival Gnaoua : tout ce qu'il faut savoir</h3>
+                <p class="blog-card-excerpt">
+                    Programmation, infos pratiques, conseils... Préparez votre visite au plus grand festival de musique Gnaoua.
+                </p>
+                <div class="blog-card-footer">
+                    <div class="blog-card-author">
+                        <div class="author-avatar">R</div>
+                        <span class="author-name">Rachid Slaoui</span>
+                    </div>
+                    <span class="read-more">
+                        Lire plus <i class="fas fa-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Message si aucun résultat -->
+    <div class="no-results" id="noResults" style="display: none;">
+        <i class="fas fa-search"></i>
+        <h3>Aucun article trouvé</h3>
+        <p>Essayez une autre catégorie</p>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const categoryChips = document.querySelectorAll('.category-chip');
+        const blogCards = document.querySelectorAll('.blog-card');
+        const featuredArticle = document.querySelector('.featured-article');
+        const noResults = document.getElementById('noResults');
+        const blogGrid = document.getElementById('blogGrid');
+
+        let currentCategory = 'all';
+
+        function filterArticles() {
+            let visibleCount = 0;
+
+            if (featuredArticle) {
+                const featuredCat = featuredArticle.dataset.category;
+                const matchesCategory = currentCategory === 'all' || featuredCat === currentCategory;
+                
+                featuredArticle.style.display = matchesCategory ? 'grid' : 'none';
+                if (matchesCategory) visibleCount++;
+            }
+
+            blogCards.forEach(card => {
+                const category = card.dataset.category;
+                const matchesCategory = currentCategory === 'all' || category === currentCategory;
+
+                if (matchesCategory) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (visibleCount === 0) {
+                blogGrid.style.display = 'none';
+                noResults.style.display = 'block';
+            } else {
+                blogGrid.style.display = 'grid';
+                noResults.style.display = 'none';
+            }
+        }
+
+        categoryChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                categoryChips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                currentCategory = chip.dataset.category;
+                filterArticles();
+            });
+        });
+    });
+</script>
+{% endblock %}

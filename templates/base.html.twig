@@ -18,7 +18,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background-color: #f8fafc;
+            background-color: #ffffff;
         }
 
         /* NAVBAR */
@@ -823,7 +823,7 @@
                             {% endif %}
                         </a>
 
-                        <!-- User Menu -->
+                        <!-- ✅ MENU UTILISATEUR MODIFIÉ -->
                         <div class="user-menu">
                             <div class="user-avatar">{{ app.user.prenom|slice(0, 1)|upper }}</div>
                             <span class="user-name d-none d-xl-inline">{{ app.user.prenom }}</span>
@@ -834,17 +834,18 @@
                                     <div class="user-info-name">{{ app.user.prenom }} {{ app.user.nom }}</div>
                                     <div class="user-info-email">{{ app.user.email }}</div>
                                 </div>
+                                
                                 {% if is_granted('ROLE_OWNER') %}
                                     <a href="{{ path('app_owner_dashboard') }}" class="dropdown-item-modern"><i class="fas fa-chart-line"></i> Dashboard Owner</a>
                                 {% elseif is_granted('ROLE_RESPONSABLE') %}
-                                    <a href="{{ path('app_responsable_dashboard') }}" class="dropdown-item-modern"><i class="fas fa-tasks"></i> Dashboard Responsable</a>
-                                    <a href="{{ path('app_responsable_evenements') }}" class="dropdown-item-modern"><i class="fas fa-calendar"></i> Mes Événements</a>
-                                    <a href="{{ path('app_responsable_clients') }}" class="dropdown-item-modern"><i class="fas fa-users"></i> Clients</a>
+                                    {# ✅ RESPONSABLE : SEULEMENT DASHBOARD #}
+                                    <a href="{{ path('app_responsable_dashboard') }}" class="dropdown-item-modern"><i class="fas fa-chart-line"></i> Dashboard Responsable</a>
                                 {% else %}
+                                    {# ✅ CLIENT : PROFILE + DASHBOARD #}
                                     <a href="{{ path('app_client_profile') }}" class="dropdown-item-modern"><i class="fas fa-user"></i> Mon Profil</a>
-                                    <a href="{{ path('app_client_tickets') }}" class="dropdown-item-modern"><i class="fas fa-ticket-alt"></i> Mes Tickets</a>
-                                    <a href="{{ path('app_client_recus') }}" class="dropdown-item-modern"><i class="fas fa-receipt"></i> Mes Reçus</a>
+                                    <a href="{{ path('app_client_dashboard') }}" class="dropdown-item-modern"><i class="fas fa-chart-line"></i> Dashboard Client</a>
                                 {% endif %}
+                                
                                 <div style="height: 1px; background: #f1f5f9; margin: 0.5rem 0;"></div>
                                 <a href="{{ path('app_logout') }}" class="dropdown-item-modern" style="color: #ef4444;">
                                     <i class="fas fa-sign-out-alt"></i> Déconnexion
@@ -916,7 +917,7 @@
                         <li><a href="#">Qui sommes-nous ?</a></li>
                         <li><a href="{{ path('app_contact') }}">Contactez-nous</a></li>
                         <li><a href="{{ path('app_faq') }}">F.A.Q</a></li>
-                        <li><a href="#">Blog</a></li>
+                        <li><a href="{{ path('app_blog') }}">Blog</a></li>
                     </ul>
                 </div>
 

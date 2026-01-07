@@ -22,16 +22,16 @@
         padding: 0 20px;
     }
 
-    /* ========== HEADER AVEC VIDÉO ========== */
+    /* ========== HEADER AVEC VIDÉO (SANS BANNIÈRE TEXTE) ========== */
     .events-header {
         position: relative;
-        min-height: 450px;
+        height: 320px;
         border-radius: 24px;
         overflow: hidden;
         margin: 30px 0 50px 0;
         display: flex;
-        align-items: flex-end;
-        padding-bottom: 40px;
+        align-items: center;
+        justify-content: center;
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
     }
 
@@ -96,67 +96,6 @@
         10% { opacity: 1; }
         90% { opacity: 1; }
         100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
-    }
-
-    .header-content-band {
-        position: relative;
-        z-index: 3;
-        width: 100%;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(30px) saturate(180%);
-        -webkit-backdrop-filter: blur(30px) saturate(180%);
-        padding: 35px 45px;
-        border: 3px solid rgba(255, 255, 255, 0.5);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-        border-radius: 20px;
-        margin: 0 20px;
-        animation: slideInUp 1s ease-out;
-    }
-
-    @keyframes slideInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .events-header h1 {
-        font-size: 3rem;
-        font-weight: 900;
-        margin-bottom: 1rem;
-        color: white;
-        text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.7);
-        letter-spacing: -1px;
-        animation: titleGlow 3s ease-in-out infinite;
-    }
-
-    @keyframes titleGlow {
-        0%, 100% { text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.7); }
-        50% { text-shadow: 3px 3px 25px rgba(102, 126, 234, 0.8); }
-    }
-
-    .events-header h1 i {
-        display: inline-block;
-        animation: iconBounce 2s ease-in-out infinite;
-    }
-
-    @keyframes iconBounce {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-5px); }
-    }
-
-    .events-header p {
-        font-size: 1.35rem;
-        margin-bottom: 0;
-        color: rgba(255, 255, 255, 0.95);
-        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
-        font-weight: 500;
-        line-height: 1.6;
     }
 
     /* ========== SECTION FILTRES ========== */
@@ -552,16 +491,8 @@
     /* ========== RESPONSIVE ========== */
     @media (max-width: 768px) {
         .events-header {
-            min-height: 320px;
+            height: 240px;
             border-radius: 16px;
-        }
-        
-        .events-header h1 {
-            font-size: 2rem;
-        }
-        
-        .events-header p {
-            font-size: 1rem;
         }
         
         .events-grid {
@@ -572,11 +503,6 @@
         .filter-btn {
             width: 100%;
             justify-content: center;
-        }
-        
-        .header-content-band {
-            padding: 25px 30px;
-            margin: 0 15px;
         }
         
         .filters-section {
@@ -704,17 +630,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 {% block body %}
 <div class="page-container">
+    <!-- VIDÉO SANS BANNIÈRE TEXTE -->
     <section class="events-header">
         <video class="header-video" autoplay muted loop playsinline>
             <source src="{{ asset('images/qata3.mp4') }}" type="video/mp4">
         </video>
         
         <div class="video-overlay"></div>
-        
-        <div class="header-content-band">
-            <h1><i class="fas fa-calendar-check"></i> Vivez des moments inoubliables</h1>
-            <p>Réservez votre place pour les événements les plus attendus du moment</p>
-        </div>
     </section>
 
     <div class="filters-section">

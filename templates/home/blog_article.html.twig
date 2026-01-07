@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article du blog - Qataa3.ma{% endblock %}
+
+{% block body %}
+    <section class="blog-hero">
+        <div class="hero-content">
+            <h1>Article du blog</h1>
+            <p class="hero-subtitle">Slug : {{ slug }}</p>
+        </div>
+    </section>
+
+    <div class="blog-main">
+        <p style="color:#64748b; margin-top:30px;">
+            Ici tu afficheras le contenu réel de l’article correspondant au slug <strong>{{ slug }}</strong>.
+        </p>
+        <p style="margin-top:15px;">
+            <a href="{{ path('app_blog') }}" style="color:#667eea; font-weight:600;">← Retour au blog</a>
+        </p>
+    </div>
+{% endblock %}
+ 

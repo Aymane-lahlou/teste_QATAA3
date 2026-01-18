@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "5ac7f2a861bb1f1716f9d344575e7908",
+=======
+    "content-hash": "bf196ae4518772d1c7fe1d7dfa443e09",
+>>>>>>> 6f8b04cb73bf856cc2fe0ef8aef677ab5e9dd4ca
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2362,6 +2366,7 @@
             "time": "2025-07-11T13:20:48+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "symfony/apache-pack",
             "version": "v1.0.1",
             "source": {
@@ -2388,6 +2393,8 @@
             "time": "2017-12-12T01:46:35+00:00"
         },
         {
+=======
+>>>>>>> 6f8b04cb73bf856cc2fe0ef8aef677ab5e9dd4ca
             "name": "symfony/asset",
             "version": "v7.4.0",
             "source": {
@@ -10796,7 +10803,11 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
+<<<<<<< HEAD
     "stability-flags": [],
+=======
+    "stability-flags": {},
+>>>>>>> 6f8b04cb73bf856cc2fe0ef8aef677ab5e9dd4ca
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -10804,6 +10815,10 @@
         "ext-ctype": "*",
         "ext-iconv": "*"
     },
+<<<<<<< HEAD
     "platform-dev": [],
+=======
+    "platform-dev": {},
+>>>>>>> 6f8b04cb73bf856cc2fe0ef8aef677ab5e9dd4ca
     "plugin-api-version": "2.6.0"
 }

@@ -62,6 +62,7 @@
             "./bin/phpunit"
         ]
     },
+<<<<<<< HEAD
     "symfony/apache-pack": {
         "version": "1.0",
         "recipe": {
@@ -71,6 +72,8 @@
             "ref": "5d454ec6cc4c700ed3d963f3803e1d427d9669fb"
         }
     },
+=======
+>>>>>>> 6f8b04cb73bf856cc2fe0ef8aef677ab5e9dd4ca
     "symfony/asset-mapper": {
         "version": "7.4",
         "recipe": {

@@ -14,7 +14,10 @@
         "endroid/qr-code": "4.8",
         "phpdocumentor/reflection-docblock": "^5.6.5",
         "phpstan/phpdoc-parser": "^2.3",
+<<<<<<< HEAD
         "symfony/apache-pack": "*",
+=======
+>>>>>>> 6f8b04cb73bf856cc2fe0ef8aef677ab5e9dd4ca
         "symfony/asset": "7.4.*",
         "symfony/asset-mapper": "7.4.*",
         "symfony/console": "7.4.*",
@@ -100,7 +103,11 @@
         }
     },
     "require-dev": {
+<<<<<<< HEAD
         "doctrine/doctrine-fixtures-bundle": "^4.3",
+=======
+        "doctrine/doctrine-fixtures-bundle": "^4.3.1",
+>>>>>>> 6f8b04cb73bf856cc2fe0ef8aef677ab5e9dd4ca
         "phpunit/phpunit": "^12.5.4",
         "symfony/browser-kit": "7.4.*",
         "symfony/css-selector": "7.4.*",

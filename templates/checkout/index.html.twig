@@ -1,0 +1,644 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement - Qataa3.ma{% endblock %}
+
+{% block body %}
+<style>
+    body { 
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
+
+    /* Page Header */
+    .page-header {
+        background: white;
+        padding: 32px 40px;
+        border-radius: 24px;
+        margin-bottom: 32px;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.8);
+        animation: slideDown 0.5s ease;
+    }
+    
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-title {
+        font-size: 1.85rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Alert */
+    .alert-demo {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border: 2px solid #fcd34d;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 25px;
+        color: #92400e;
+        font-weight: 600;
+        animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Cards */
+    .payment-card {
+        background: white;
+        border-radius: 24px;
+        padding: 30px;
+        box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255,255,255,0.8);
+        margin-bottom: 25px;
+        animation: fadeInUp 0.6s ease backwards;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-header-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 16px;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.2rem;
+        font-weight: 800;
+    }
+
+    /* Order Items */
+    .order-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .order-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .item-title {
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 8px;
+    }
+    .item-badge {
+        background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+        color: #667eea;
+        padding: 4px 10px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-right: 8px;
+    }
+
+    /* Promo Code Section */
+    .promo-section {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border: 2px dashed #d1d5db;
+        border-radius: 16px;
+        padding: 18px;
+        margin: 20px 0;
+    }
+    .promo-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .promo-input-group {
+        display: flex;
+        gap: 8px;
+        align-items: stretch;
+    }
+    .promo-input {
+        flex: 1;
+        padding: 12px 14px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        transition: all 0.3s;
+        background: white;
+    }
+    .promo-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    .btn-apply-promo {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 18px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+        min-width: 100px;
+    }
+    .btn-apply-promo:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    }
+
+    .promo-applied {
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        border: 2px solid #86efac;
+        padding: 14px 16px;
+        border-radius: 12px;
+        margin: 20px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: slideDown 0.4s ease;
+    }
+    .promo-applied-text {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #166534;
+    }
+    .btn-remove-promo {
+        background: #166534;
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    .btn-remove-promo:hover {
+        background: #14532d;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 15px 0;
+        font-size: 1rem;
+        color: #64748b;
+    }
+
+    .discount-row {
+        display: flex;
+        justify-content: space-between;
+        margin: 15px 0;
+        font-size: 1rem;
+        color: #16a34a;
+        font-weight: 700;
+        padding: 10px 12px;
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border-radius: 10px;
+    }
+
+    .total-section {
+        padding-top: 20px;
+        margin-top: 20px;
+        border-top: 2px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .total-amount {
+        font-size: 1.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* Form Styles */
+    .form-label {
+        font-weight: 600;
+        color: #475569;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    .form-control-custom {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s;
+        font-weight: 500;
+    }
+    .form-control-custom:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+    .form-control-custom.is-invalid {
+        border-color: #dc2626;
+    }
+    .form-control-custom.is-valid {
+        border-color: #059669;
+    }
+
+    .input-with-icon {
+        position: relative;
+    }
+    .card-icon {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.8rem;
+        transition: all 0.3s;
+    }
+
+    .error-message {
+        color: #dc2626;
+        font-size: 0.85rem;
+        margin-top: 6px;
+        display: none;
+    }
+    .error-message.show {
+        display: block;
+    }
+
+    /* Button */
+    .btn-pay {
+        width: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 18px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        cursor: pointer;
+        margin-top: 25px;
+    }
+    .btn-pay:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    }
+    .btn-pay:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    /* Sidebar */
+    .security-card {
+        background: white;
+        border-radius: 24px;
+        padding: 30px;
+        box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 20px;
+    }
+    .security-card h6 {
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .security-card ul {
+        padding-left: 20px;
+    }
+    .security-card li {
+        color: #64748b;
+        margin-bottom: 8px;
+    }
+</style>
+
+<div class="container py-5">
+    <!-- Header -->
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-credit-card" style="color: #667eea;"></i>
+            Paiement Sécurisé
+        </h1>
+    </div>
+
+    <div class="alert-demo">
+        <i class="fas fa-info-circle"></i> <strong>Mode Démonstration :</strong> 
+        Aucun paiement réel ne sera effectué. Ce formulaire est une simulation.
+    </div>
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Order Summary -->
+            <div class="payment-card" style="animation-delay: 0.1s;">
+                <div class="card-header-custom">
+                    <i class="fas fa-shopping-bag"></i>
+                    Récapitulatif de votre commande
+                </div>
+
+                {% for item in cart_items %}
+                    <div class="order-item">
+                        <div>
+                            <div class="item-title">{{ item.billet.evenement.titre }}</div>
+                            <small>
+                                <span class="item-badge">{{ item.billet.nomType }}</span>
+                                × {{ item.quantite }}
+                            </small>
+                        </div>
+                        <strong style="color: #1e293b;">{{ item.sousTotal|number_format(2, '.', ',') }} MAD</strong>
+                    </div>
+                {% endfor %}
+
+                <!-- Promo Code Section -->
+                {% if promo_code %}
+                    <div class="promo-applied">
+                        <div class="promo-applied-text">
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>{{ promo_code }}</strong> appliqué</span>
+                        </div>
+                        <form action="{{ path('app_checkout') }}" method="post" style="display: inline;">
+                            <input type="hidden" name="promo_code" value="">
+                            <button type="submit" class="btn-remove-promo" title="Retirer le code promo">
+                                <i class="fas fa-times me-1"></i>Retirer
+                            </button>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="promo-section">
+                        <div class="promo-label">
+                            <i class="fas fa-tag"></i>
+                            Code promo
+                        </div>
+                        <form action="{{ path('app_checkout') }}" method="post">
+                            <div class="promo-input-group">
+                                <input type="text" 
+                                       name="promo_code" 
+                                       class="promo-input" 
+                                       placeholder="Ex: QATA3_10"
+                                       value="{{ promo_code|default('') }}">
+                                <button type="submit" class="btn-apply-promo">
+                                    Appliquer
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
+
+                <div class="summary-row">
+                    <span>Sous-total</span>
+                    <strong>{{ total|number_format(2, '.', ',') }} MAD</strong>
+                </div>
+
+                {% if discount_amount is defined and discount_amount > 0 %}
+                    <div class="discount-row">
+                        <span>
+                            <i class="fas fa-tag me-1"></i>
+                            Réduction ({{ (discount_rate * 100)|number_format(0) }}%)
+                        </span>
+                        <span>-{{ discount_amount|number_format(2, '.', ',') }} MAD</span>
+                    </div>
+                {% endif %}
+                
+                <div class="total-section">
+                    <h5 style="margin: 0; color: #1e293b;">Total</h5>
+                    <div class="total-amount">
+                        {{ (total_after_discount is defined ? total_after_discount : total)|number_format(2, '.', ',') }} MAD
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Form -->
+            <div class="payment-card" style="animation-delay: 0.2s;">
+                <div class="card-header-custom">
+                    <i class="fas fa-lock"></i>
+                    Informations de paiement
+                </div>
+
+                <form action="{{ path('app_checkout_process') }}" method="post" id="paymentForm">
+                    <!-- Card Holder Name -->
+                    <div class="mb-4">
+                        <label for="cardName" class="form-label">Nom du titulaire</label>
+                        <input 
+                            type="text" 
+                            class="form-control-custom" 
+                            id="cardName" 
+                            name="cardName"
+                            placeholder="Ex: AHMED BENNANI" 
+                            required
+                            pattern="[A-Za-zÀ-ÿ\s]+"
+                        >
+                        <div class="error-message" id="errorCardName">
+                            <i class="fas fa-exclamation-circle"></i> Seulement des lettres sont autorisées
+                        </div>
+                    </div>
+
+                    <!-- Card Number -->
+                    <div class="mb-4">
+                        <label for="cardNumber" class="form-label">Numéro de carte</label>
+                        <div class="input-with-icon">
+                            <input 
+                                type="text" 
+                                class="form-control-custom" 
+                                id="cardNumber" 
+                                name="cardNumber"
+                                placeholder="1234 5678 9012 3456" 
+                                maxlength="19"
+                                required
+                            >
+                            <i class="card-icon" id="cardIcon"></i>
+                        </div>
+                        <div class="error-message" id="errorCardNumber">
+                            <i class="fas fa-exclamation-circle"></i> Numéro de carte invalide (16 chiffres requis)
+                        </div>
+                    </div>
+
+                    <!-- Expiry & CVV -->
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="cardExpiry" class="form-label">Date d'expiration</label>
+                            <input 
+                                type="text" 
+                                class="form-control-custom" 
+                                id="cardExpiry" 
+                                name="cardExpiry"
+                                placeholder="MM/AA" 
+                                maxlength="5"
+                                required
+                            >
+                            <div class="error-message" id="errorCardExpiry">
+                                <i class="fas fa-exclamation-circle"></i> Format invalide (MM/AA)
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="cardCvv" class="form-label">CVV</label>
+                            <input 
+                                type="text" 
+                                class="form-control-custom" 
+                                id="cardCvv" 
+                                name="cardCvv"
+                                placeholder="123" 
+                                maxlength="4"
+                                required
+                            >
+                            <div class="error-message" id="errorCardCvv">
+                                <i class="fas fa-exclamation-circle"></i> 3 ou 4 chiffres requis
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="_token" value="{{ csrf_token('checkout') }}">
+
+                    <button type="submit" class="btn-pay" id="submitBtn">
+                        <i class="fas fa-lock"></i> Confirmer le paiement ({{ (total_after_discount is defined ? total_after_discount : total)|number_format(2, '.', ',') }} MAD)
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="security-card">
+                <h6>
+                    <i class="fas fa-shield-alt" style="color: #059669;"></i> 
+                    Paiement sécurisé
+                </h6>
+                <p style="color: #64748b; font-size: 0.9rem;">
+                    Vos informations sont protégées et cryptées.
+                </p>
+                
+                <hr style="border-color: #e2e8f0; margin: 20px 0;">
+                
+                <h6>
+                    <i class="fas fa-ticket-alt" style="color: #667eea;"></i> 
+                    Après paiement
+                </h6>
+                <ul style="font-size: 0.9rem;">
+                    <li>Tickets avec QR Code</li>
+                    <li>Reçu PDF téléchargeable</li>
+                    <li>Email de confirmation</li>
+                    <li>Accès immédiat</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Validation en temps réel
+const cardName = document.getElementById('cardName');
+const cardNumber = document.getElementById('cardNumber');
+const cardExpiry = document.getElementById('cardExpiry');
+const cardCvv = document.getElementById('cardCvv');
+const cardIcon = document.getElementById('cardIcon');
+const submitBtn = document.getElementById('submitBtn');
+
+// Validation Nom (seulement lettres)
+cardName.addEventListener('input', function(e) {
+    this.value = this.value.replace(/[^A-Za-zÀ-ÿ\s]/g, '').toUpperCase();
+    validateField(this, /^[A-Za-zÀ-ÿ\s]{3,}$/, 'errorCardName');
+});
+
+// Validation Numéro de carte + détection type
+cardNumber.addEventListener('input', function(e) {
+    // Supprimer tout sauf les chiffres
+    let value = this.value.replace(/\D/g, '');
+    
+    // Formater avec espaces (4 chiffres)
+    value = value.match(/.{1,4}/g)?.join(' ') || value;
+    this.value = value;
+    
+    // Détection type de carte
+    const firstDigit = value.charAt(0);
+    if (firstDigit === '4') {
+        cardIcon.className = 'card-icon fab fa-cc-visa';
+        cardIcon.style.color = '#1434CB';
+    } else if (firstDigit === '5') {
+        cardIcon.className = 'card-icon fab fa-cc-mastercard';
+        cardIcon.style.color = '#EB001B';
+    } else {
+        cardIcon.className = 'card-icon fas fa-credit-card';
+        cardIcon.style.color = '#94a3b8';
+    }
+    
+    // Validation (16 chiffres)
+    const digitsOnly = value.replace(/\s/g, '');
+    validateField(this, /^\d{16}$/, 'errorCardNumber', digitsOnly);
+});
+
+// Validation Date d'expiration (MM/AA)
+cardExpiry.addEventListener('input', function(e) {
+    let value = this.value.replace(/\D/g, '');
+    
+    if (value.length >= 2) {
+        value = value.substring(0, 2) + '/' + value.substring(2, 4);
+    }
+    this.value = value;
+    
+    validateField(this, /^(0[1-9]|1[0-2])\/\d{2}$/, 'errorCardExpiry');
+});
+
+// Validation CVV (3 ou 4 chiffres)
+cardCvv.addEventListener('input', function(e) {
+    this.value = this.value.replace(/\D/g, '');
+    validateField(this, /^\d{3,4}$/, 'errorCardCvv');
+});
+
+// Fonction de validation
+function validateField(field, pattern, errorId, testValue = null) {
+    const value = testValue || field.value;
+    const errorMsg = document.getElementById(errorId);
+    
+    if (pattern.test(value)) {
+        field.classList.remove('is-invalid');
+        field.classList.add('is-valid');
+        errorMsg.classList.remove('show');
+        return true;
+    } else if (value.length > 0) {
+        field.classList.add('is-invalid');
+        field.classList.remove('is-valid');
+        errorMsg.classList.add('show');
+        return false;
+    } else {
+        field.classList.remove('is-invalid', 'is-valid');
+        errorMsg.classList.remove('show');
+        return false;
+    }
+}
+
+// Validation au submit
+document.getElementById('paymentForm').addEventListener('submit', function(e) {
+    const isNameValid = validateField(cardName, /^[A-Za-zÀ-ÿ\s]{3,}$/, 'errorCardName');
+    const isNumberValid = validateField(cardNumber, /^\d{16}$/, 'errorCardNumber', cardNumber.value.replace(/\s/g, ''));
+    const isExpiryValid = validateField(cardExpiry, /^(0[1-9]|1[0-2])\/\d{2}$/, 'errorCardExpiry');
+    const isCvvValid = validateField(cardCvv, /^\d{3,4}$/, 'errorCardCvv');
+    
+    if (!isNameValid || !isNumberValid || !isExpiryValid || !isCvvValid) {
+        e.preventDefault();
+        alert('Veuillez corriger les erreurs dans le formulaire');
+    }
+});
+</script>
+{% endblock %}

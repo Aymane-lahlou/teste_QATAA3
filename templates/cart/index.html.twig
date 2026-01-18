@@ -1,0 +1,600 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Panier - Qataa3.ma{% endblock %}
+
+{% block body %}
+<style>
+    body { 
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
+
+    /* Header Page */
+    .page-header {
+        background: white;
+        padding: 32px 40px;
+        border-radius: 24px;
+        margin-bottom: 32px;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.8);
+        animation: slideDown 0.5s ease;
+    }
+    
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-title {
+        font-size: 1.85rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Cart Item Card */
+    .cart-item-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(255,255,255,0.8);
+        box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1);
+        transition: all 0.3s;
+        animation: fadeInUp 0.6s ease backwards;
+    }
+    
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .cart-item-card:nth-child(1) { animation-delay: 0.1s; }
+    .cart-item-card:nth-child(2) { animation-delay: 0.2s; }
+    .cart-item-card:nth-child(3) { animation-delay: 0.3s; }
+
+    .cart-item-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px -10px rgba(102, 126, 234, 0.2);
+        border-color: #c7d2fe;
+    }
+
+    .event-title {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .badge-type {
+        background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+        color: #667eea;
+        padding: 6px 14px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        border: 1.5px solid #c7d2fe;
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+
+    .item-meta {
+        color: #64748b;
+        font-size: 0.95rem;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .item-meta i {
+        color: #667eea;
+        width: 18px;
+    }
+
+    .quantity-section {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    .quantity-input {
+        width: 70px;
+        text-align: center;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 8px;
+        font-weight: 600;
+        transition: border-color 0.3s;
+    }
+    .quantity-input:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+
+    .price-display {
+        font-size: 1.3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .btn-remove {
+        background: #fee2e2;
+        color: #dc2626;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .btn-remove:hover {
+        background: #dc2626;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    .btn-clear-cart {
+        background: white;
+        color: #dc2626;
+        border: 2px solid #fecaca;
+        padding: 12px 28px;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-clear-cart:hover {
+        background: #fef2f2;
+        border-color: #dc2626;
+        color: #dc2626;
+    }
+
+    /* Summary Card */
+    .summary-card {
+        background: white;
+        border-radius: 24px;
+        padding: 30px;
+        box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255,255,255,0.8);
+        position: sticky;
+        top: 20px;
+        animation: fadeInUp 0.6s ease 0.2s backwards;
+    }
+
+    .summary-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 16px;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.3rem;
+        font-weight: 800;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        font-size: 1rem;
+        color: #64748b;
+    }
+
+    /* Promo Code Section */
+    .promo-section {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border: 2px dashed #d1d5db;
+        border-radius: 16px;
+        padding: 18px;
+        margin-bottom: 20px;
+    }
+    .promo-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .promo-label i {
+        font-size: 0.9rem;
+    }
+    .promo-input-group {
+        display: flex;
+        gap: 8px;
+        align-items: stretch;
+    }
+    .promo-input {
+        flex: 1;
+        padding: 12px 14px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        transition: all 0.3s;
+        background: white;
+    }
+    .promo-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    .promo-input::placeholder {
+        color: #94a3b8;
+        text-transform: none;
+    }
+    .btn-apply-promo {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 18px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        white-space: nowrap;
+        min-width: 100px;
+    }
+    .btn-apply-promo:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    }
+    .btn-apply-promo:active {
+        transform: translateY(0);
+    }
+
+    .promo-applied {
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        border: 2px solid #86efac;
+        padding: 14px 16px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: slideDown 0.4s ease;
+    }
+    .promo-applied-text {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #166534;
+    }
+    .btn-remove-promo {
+        background: #166534;
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 6px;
+        transition: all 0.2s;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    .btn-remove-promo:hover {
+        background: #14532d;
+    }
+
+    .discount-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        font-size: 1rem;
+        color: #16a34a;
+        font-weight: 700;
+        padding: 10px 12px;
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border-radius: 10px;
+    }
+
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 20px;
+        margin-top: 20px;
+        border-top: 2px solid #e2e8f0;
+        font-size: 1.4rem;
+        font-weight: 800;
+    }
+    .total-amount {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .btn-checkout {
+        width: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 16px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1.05rem;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        margin-bottom: 12px;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+    }
+    .btn-checkout:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        color: white;
+    }
+
+    .btn-login, .btn-register {
+        width: 100%;
+        padding: 14px;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .btn-login {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+    .btn-register {
+        background: white;
+        color: #667eea;
+        border: 2px solid #e0e7ff;
+    }
+    .btn-register:hover {
+        background: #f8fafc;
+        border-color: #667eea;
+        color: #667eea;
+    }
+
+    /* Empty State */
+    .empty-state {
+        background: white;
+        border-radius: 24px;
+        padding: 80px 40px;
+        text-align: center;
+        box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1);
+        animation: fadeIn 0.6s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    .empty-icon-wrapper {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 24px;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid #e2e8f0;
+    }
+    .empty-state h3 {
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 12px;
+    }
+    .empty-state p {
+        color: #64748b;
+        margin-bottom: 32px;
+    }
+    .btn-back-events {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s;
+    }
+    .btn-back-events:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        color: white;
+    }
+</style>
+
+<div class="container py-5">
+    <!-- Header -->
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-shopping-cart" style="color: #667eea;"></i>
+            Mon Panier
+        </h1>
+    </div>
+
+    {% if cart_items is empty %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon-wrapper">
+                <i class="fas fa-shopping-cart fa-3x" style="color: #94a3b8;"></i>
+            </div>
+            <h3>Votre panier est vide</h3>
+            <p>Découvrez nos événements et réservez vos billets</p>
+            <a href="{{ path('app_events') }}" class="btn-back-events">
+                <i class="fas fa-search"></i> Découvrir les événements
+            </a>
+        </div>
+    {% else %}
+        <div class="row">
+            <!-- Items Column -->
+            <div class="col-lg-8">
+                {% for item in cart_items %}
+                    <div class="cart-item-card">
+                        <div class="row align-items-center">
+                            <!-- Event Info -->
+                            <div class="col-md-6">
+                                <h3 class="event-title">{{ item.billet.evenement.titre }}</h3>
+                                <span class="badge-type">{{ item.billet.nomType }}</span>
+                                
+                                <div class="item-meta">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>{{ item.billet.evenement.dateEvenement|date('d/m/Y H:i') }}</span>
+                                </div>
+                                <div class="item-meta">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>{{ item.billet.evenement.lieu }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Quantity -->
+                            <div class="col-md-3">
+                                <div class="quantity-section">
+                                    <label style="font-size: 0.9rem; color: #64748b; font-weight: 600;">Quantité</label>
+                                    <form action="{{ path('app_cart_update', {id: item.billet.id}) }}" method="post">
+                                        <input type="number" name="quantite" value="{{ item.quantite }}" min="1" max="{{ item.billet.quantiteRestante }}" class="quantity-input" onchange="this.form.submit()">
+                                    </form>
+                                    <small style="color: #94a3b8;">Max: {{ item.billet.quantiteRestante }}</small>
+                                </div>
+                            </div>
+
+                            <!-- Price & Remove -->
+                            <div class="col-md-3 text-end">
+                                <div class="price-display">{{ item.sousTotal|number_format(2, '.', ',') }} MAD</div>
+                                <small style="color: #94a3b8; display: block; margin-bottom: 15px;">
+                                    {{ item.billet.prix }} MAD / unité
+                                </small>
+                                <a href="{{ path('app_cart_remove', {id: item.billet.id}) }}" class="btn-remove">
+                                    <i class="fas fa-trash"></i> Supprimer
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <!-- Clear Button -->
+                <a href="{{ path('app_cart_clear') }}" class="btn-clear-cart" onclick="return confirm('Vider tout le panier ?')">
+                    <i class="fas fa-trash"></i> Vider le panier
+                </a>
+            </div>
+
+            <!-- Summary Column -->
+            <div class="col-lg-4">
+                <div class="summary-card">
+                    <div class="summary-header">
+                        <i class="fas fa-receipt"></i>
+                        Récapitulatif
+                    </div>
+
+                    <!-- Promo Code Section -->
+                    {% if promo_code %}
+                        <div class="promo-applied">
+                            <div class="promo-applied-text">
+                                <i class="fas fa-check-circle"></i>
+                                <span><strong>{{ promo_code }}</strong> appliqué</span>
+                            </div>
+                            <form action="{{ path('app_cart') }}" method="post" style="display: inline;">
+                                <input type="hidden" name="promo_code" value="">
+                                <button type="submit" class="btn-remove-promo" title="Retirer le code promo">
+                                    <i class="fas fa-times me-1"></i>Retirer
+                                </button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <div class="promo-section">
+                            <div class="promo-label">
+                                <i class="fas fa-tag"></i>
+                                Code promo
+                            </div>
+                            <form action="{{ path('app_cart') }}" method="post">
+                                <div class="promo-input-group">
+                                    <input type="text" 
+                                           name="promo_code" 
+                                           class="promo-input" 
+                                           placeholder="Ex: QATA3_10"
+                                           value="{{ promo_code|default('') }}">
+                                    <button type="submit" class="btn-apply-promo">
+                                        Appliquer
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    {% endif %}
+
+                    <div class="summary-row">
+                        <span>Sous-total</span>
+                        <strong>{{ total|number_format(2, '.', ',') }} MAD</strong>
+                    </div>
+
+                    {% if discount_amount is defined and discount_amount > 0 %}
+                        <div class="discount-row">
+                            <span>
+                                <i class="fas fa-tag me-1"></i>
+                                Réduction ({{ (discount_rate * 100)|number_format(0) }}%)
+                            </span>
+                            <span>-{{ discount_amount|number_format(2, '.', ',') }} MAD</span>
+                        </div>
+                    {% endif %}
+
+                    <div class="summary-total">
+                        <strong>Total</strong>
+                        <strong class="total-amount">
+                            {{ (total_after_discount is defined ? total_after_discount : total)|number_format(2, '.', ',') }} MAD
+                        </strong>
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        {% if app.user %}
+                            <a href="{{ path('app_checkout') }}" class="btn-checkout">
+                                <i class="fas fa-credit-card me-2"></i>Procéder au paiement
+                            </a>
+                        {% else %}
+                            <p style="text-align: center; color: #64748b; font-size: 0.95rem; margin-bottom: 20px;">
+                                Connectez-vous pour finaliser votre achat
+                            </p>
+                            <a href="{{ path('app_login') }}" class="btn-login">
+                                <i class="fas fa-sign-in-alt me-2"></i>Se connecter
+                            </a>
+                            <a href="{{ path('app_register') }}" class="btn-register">
+                                <i class="fas fa-user-plus me-2"></i>Créer un compte
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

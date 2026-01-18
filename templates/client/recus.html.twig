@@ -1,0 +1,328 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Reçus - Qataa3.ma{% endblock %}
+
+{% block body %}
+<style>
+    body { 
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
+    
+    /* Header Premium */
+    .page-header {
+        background: white;
+        padding: 32px 40px;
+        border-radius: 24px;
+        margin-bottom: 32px;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,255,255,0.8);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: slideDown 0.5s ease;
+    }
+    
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .page-title {
+        font-size: 1.85rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin: 0 0 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .page-subtitle {
+        color: #64748b;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+    
+    /* Table Container */
+    .premium-table-container {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255,255,255,0.8);
+        overflow: hidden;
+        animation: fadeIn 0.6s ease 0.2s both;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Table */
+    .table {
+        margin: 0;
+    }
+    .table thead {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .table th {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: white;
+        font-weight: 700;
+        padding: 22px 28px;
+        border: none;
+    }
+    .table td {
+        padding: 28px;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+        color: #334155;
+        font-weight: 500;
+    }
+    .table tr:last-child td { 
+        border-bottom: none; 
+    }
+    .table tbody tr { 
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .table tbody tr:hover { 
+        background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 100%);
+        transform: translateX(4px);
+        box-shadow: -4px 0 0 0 #667eea;
+    }
+
+    /* Badges & Elements */
+    .recu-id {
+        font-family: 'Courier New', monospace;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #667eea;
+        background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+        padding: 8px 14px;
+        border-radius: 10px;
+        border: 1.5px solid #c7d2fe;
+        display: inline-block;
+        letter-spacing: 0.5px;
+    }
+    
+    .date-box {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .date-main {
+        font-weight: 700;
+        font-size: 1rem;
+        color: #1e293b;
+    }
+    .date-time {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .amount-display { 
+        font-size: 1.25rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .status-badge-success {
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        color: #059669;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1.5px solid #a7f3d0;
+        box-shadow: 0 2px 8px rgba(5, 150, 105, 0.15);
+    }
+    
+    /* Buttons */
+    .btn-back {
+        background: white;
+        border: 2px solid #e2e8f0;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        color: #64748b;
+        text-decoration: none;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-back:hover {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+        color: #334155;
+        transform: translateX(-4px);
+    }
+    
+    .btn-download-pro {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    .btn-download-pro:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        color: white;
+    }
+    .btn-download-pro:active {
+        transform: translateY(-1px);
+    }
+    
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 80px 40px;
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255,255,255,0.8);
+        animation: fadeIn 0.6s ease;
+    }
+    .empty-icon-wrapper {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 24px;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid #e2e8f0;
+    }
+    .empty-state h3 {
+        font-weight: 800;
+        color: #1e293b;
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+    }
+    .empty-state p {
+        color: #64748b;
+        font-size: 1rem;
+        margin-bottom: 32px;
+    }
+    .btn-find-event {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1rem;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.3s;
+    }
+    .btn-find-event:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        color: white;
+    }
+</style>
+
+<div class="container py-5">
+    <!-- Header -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">
+                <i class="fas fa-file-invoice-dollar" style="color: #667eea;"></i>
+                Mes Reçus
+            </h1>
+            <p class="page-subtitle">Historique et téléchargement de vos factures</p>
+        </div>
+        <a href="{{ path('app_client_dashboard') }}" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Retour
+        </a>
+    </div>
+
+    {% if recus is empty %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon-wrapper">
+                <i class="fas fa-receipt fa-3x" style="color: #94a3b8;"></i>
+            </div>
+            <h3>Aucun reçu disponible</h3>
+            <p>Vos futurs reçus de paiement apparaîtront ici.</p>
+            <a href="{{ path('app_events') }}" class="btn-find-event">
+                <i class="fas fa-search"></i> Découvrir les événements
+            </a>
+        </div>
+    {% else %}
+        <!-- Table Premium -->
+        <div class="premium-table-container">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Référence</th>
+                            <th>Date & Heure</th>
+                            <th>Montant</th>
+                            <th>État</th>
+                            <th class="text-end">Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for recu in recus %}
+                            <tr>
+                                <td>
+                                    <span class="recu-id">{{ recu.numeroRecu }}</span>
+                                </td>
+                                <td>
+                                    <div class="date-box">
+                                        <span class="date-main">{{ recu.dateRecu|date('d/m/Y') }}</span>
+                                        <span class="date-time">
+                                            <i class="far fa-clock"></i>{{ recu.dateRecu|date('H:i') }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="amount-display">
+                                        {{ recu.montantTotal|number_format(2, '.', ',') }} MAD
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="status-badge-success">
+                                        <i class="fas fa-check-circle"></i> Payé
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <a href="{{ path('app_client_recu_pdf', {id: recu.id}) }}" class="btn-download-pro">
+                                        <i class="fas fa-download"></i> Télécharger
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

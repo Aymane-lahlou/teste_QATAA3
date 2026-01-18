@@ -1,0 +1,279 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription - Qataa3.ma{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body { 
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .auth-hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: url('{{ asset('images/concert-bg.jpg') }}') center center / cover no-repeat fixed;
+            padding: 1rem;
+            overflow: hidden;
+        }
+
+        .auth-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top left, rgba(129, 140, 248, 0.18), transparent 55%),
+                        radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.14), transparent 55%),
+                        linear-gradient(135deg, rgba(15, 23, 42, 0.94) 0%, rgba(15, 23, 42, 0.90) 50%, rgba(17, 24, 39, 0.92) 100%);
+            z-index: 1;
+        }
+
+        .auth-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        @keyframes authFadeUp {
+            from { opacity: 0; transform: translateY(18px) scale(0.99); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .auth-card {
+            background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.22), transparent 55%),
+                        rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(26px);
+            -webkit-backdrop-filter: blur(26px);
+            border-radius: 22px;
+            padding: 1.8rem 2.2rem;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            box-shadow: 0 26px 70px rgba(15, 23, 42, 0.85);
+            animation: authFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 1.4rem;
+        }
+
+        .auth-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #f9fafb;
+            margin-bottom: 0.2rem;
+            letter-spacing: -0.035em;
+        }
+
+        .auth-subtitle {
+            font-size: 0.88rem;
+            color: rgba(226, 232, 240, 0.7);
+            letter-spacing: -0.01em;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem 1.3rem;
+        }
+
+        .form-group { margin-bottom: 0; }
+
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: rgba(226, 232, 240, 0.92);
+            letter-spacing: -0.01em;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.45);
+            font-size: 0.92rem;
+            background: rgba(15, 23, 42, 0.85);
+            color: #f9fafb;
+            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+        }
+
+        .form-control::placeholder {
+            color: rgba(148, 163, 184, 0.75);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: rgba(129, 140, 248, 0.9);
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.7), 0 0 0 6px rgba(129, 140, 248, 0.20);
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: rgba(226, 232, 240, 0.8);
+            font-size: 0.82rem;
+            cursor: pointer;
+        }
+
+        .checkbox-label input {
+            width: 15px;
+            height: 15px;
+            accent-color: #6366f1;
+        }
+
+        .form-actions {
+            margin-top: 1.1rem;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 0.75rem 1.2rem;
+            border-radius: 999px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.92rem;
+            cursor: pointer;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 110%);
+            color: #ffffff;
+            box-shadow: 0 12px 32px rgba(79, 70, 229, 0.55);
+            transition: all 0.23s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-register:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 40px rgba(79, 70, 229, 0.7);
+        }
+
+        .micro-copy {
+            margin-top: 0.25rem;
+            font-size: 0.74rem;
+            color: rgba(148, 163, 184, 0.85);
+            text-align: center;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.86rem;
+            color: rgba(226, 232, 240, 0.7);
+        }
+
+        .auth-footer a {
+            color: rgba(165, 180, 252, 0.95);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 0.2rem;
+        }
+
+        .auth-footer a:hover {
+            color: #e5e7eb;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .auth-card {
+                padding: 1.6rem 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-title {
+                font-size: 1.4rem;
+            }
+            .auth-subtitle {
+                font-size: 0.82rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<section class="auth-hero">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1 class="auth-title">Créer un compte</h1>
+                <p class="auth-subtitle">Rejoignez Qataa3.ma et réservez vos événements en quelques clics.</p>
+            </div>
+
+            {{ form_start(registrationForm) }}
+                <div class="form-grid">
+                    <div class="form-group">
+                        {{ form_label(registrationForm.nom, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
+                        {{ form_errors(registrationForm.nom) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(registrationForm.prenom, 'Prénom', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
+                        {{ form_errors(registrationForm.prenom) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(registrationForm.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'nom@exemple.com'}}) }}
+                        {{ form_errors(registrationForm.email) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(registrationForm.telephone, 'Téléphone', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.telephone, {'attr': {'class': 'form-control', 'placeholder': '+212 6XX XXX XXX'}}) }}
+                        {{ form_errors(registrationForm.telephone) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(registrationForm.plainPassword.first, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': '••••••••'}}) }}
+                        {{ form_errors(registrationForm.plainPassword.first) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(registrationForm.plainPassword.second, 'Confirmer', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': '••••••••'}}) }}
+                        {{ form_errors(registrationForm.plainPassword.second) }}
+                    </div>
+
+                    <div class="form-group form-group-full">
+                        <label class="checkbox-label">
+                            {{ form_widget(registrationForm.agreeTerms) }}
+                            <span>J'accepte les conditions d'utilisation</span>
+                        </label>
+                        {{ form_errors(registrationForm.agreeTerms) }}
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-register">
+                        S'inscrire
+                    </button>
+                    <p class="micro-copy">Inscription sécurisée · Vos données sont protégées.</p>
+                </div>
+
+                <div class="auth-footer">
+                    Vous avez déjà un compte ?
+                    <a href="{{ path('app_login') }}">Se connecter</a>
+                </div>
+            {{ form_end(registrationForm) }}
+        </div>
+    </div>
+</section>
+{% endblock %}

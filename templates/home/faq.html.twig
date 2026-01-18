@@ -1,0 +1,752 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}FAQ - Questions Fréquentes - Qataa3.ma{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --dark: #0f172a;
+            --gray: #64748b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e8eeff 100%);
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* ===================== HERO ===================== */
+        .legal-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 100px 0 70px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .legal-hero::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: movePattern 20s linear infinite;
+        }
+
+        @keyframes movePattern {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-icon {
+            width: 90px;
+            height: 90px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .hero-icon i {
+            font-size: 3rem;
+            color: white;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+        }
+
+        .legal-hero h1 {
+            font-size: 3.2rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 18px;
+            letter-spacing: -0.03em;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.95);
+            font-weight: 500;
+        }
+
+        /* ===================== NAVIGATION STICKY ===================== */
+        .quick-nav-sticky {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: white;
+            border-bottom: 2px solid rgba(102,126,234,0.15);
+            box-shadow: 0 4px 20px rgba(102,126,234,0.12);
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 20px;
+        }
+
+        .nav-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--dark);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-title i {
+            color: var(--primary);
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: transparent;
+            border-radius: 10px;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%);
+            color: var(--primary);
+            border-color: rgba(102,126,234,0.3);
+            transform: translateX(3px);
+        }
+
+        .nav-link i {
+            width: 18px;
+            font-size: 1rem;
+            color: var(--primary);
+        }
+
+        /* ===================== MAIN CONTENT ===================== */
+        .legal-main {
+            max-width: 900px;
+            margin: 40px auto 60px;
+            padding: 0 20px;
+        }
+
+        .legal-card {
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 
+                0 30px 80px rgba(102,126,234,0.15),
+                0 0 0 1px rgba(226,232,240,0.5);
+            animation: slideUp 0.8s ease 0.2s both;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===================== SECTIONS ===================== */
+        .legal-section {
+            padding: 60px 50px;
+            border-bottom: 1px solid rgba(226,232,240,0.6);
+        }
+
+        .legal-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 18px;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 18px;
+            box-shadow: 
+                0 12px 35px rgba(102,126,234,0.4),
+                inset 0 2px 0 rgba(255,255,255,0.2);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--dark);
+            margin-bottom: 14px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-content {
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .section-content p {
+            margin-bottom: 16px;
+        }
+
+        .section-content strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .section-content em {
+            color: #8b5cf6;
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        /* ===================== INFO BOX ===================== */
+        .info-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 5px solid #0ea5e9;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .info-box h4 {
+            color: #0369a1;
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-box p {
+            color: var(--gray);
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* ===================== CONTACT BOX ===================== */
+        .contact-box {
+            background: linear-gradient(135deg, rgba(102,126,234,0.05) 0%, rgba(118,75,162,0.05) 100%);
+            border: 2px solid rgba(102,126,234,0.2);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin: 40px 0 0;
+        }
+
+        .contact-box h3 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--dark);
+            margin-bottom: 16px;
+        }
+
+        .contact-box p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 28px;
+        }
+
+        .btn-contact {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 
+                0 12px 35px rgba(102,126,234,0.4),
+                inset 0 2px 0 rgba(255,255,255,0.2);
+        }
+
+        .btn-contact:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 20px 50px rgba(102,126,234,0.5),
+                inset 0 2px 0 rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        /* ===================== RESPONSIVE ===================== */
+        @media (max-width: 768px) {
+            .legal-hero {
+                padding: 70px 0 50px;
+            }
+
+            .legal-hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-icon {
+                width: 75px;
+                height: 75px;
+            }
+
+            .hero-icon i {
+                font-size: 2.2rem;
+            }
+
+            .legal-section {
+                padding: 40px 28px;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-container {
+                padding: 12px 16px;
+            }
+
+            .nav-link {
+                padding: 12px 14px;
+            }
+
+            .contact-box {
+                padding: 32px 24px;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {# ===================== HERO ===================== #}
+    <section class="legal-hero">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="fas fa-question-circle"></i>
+            </div>
+            <h1>Foire aux Questions</h1>
+            <p class="hero-subtitle">Tout ce que vous devez savoir sur Qataa3.ma</p>
+        </div>
+    </section>
+
+    {# ===================== NAVIGATION STICKY ===================== #}
+    <nav class="quick-nav-sticky" id="stickyNav">
+        <div class="nav-container">
+            <div class="nav-title">
+                <i class="fas fa-compass"></i>
+                Questions fréquentes
+            </div>
+            <div class="nav-grid">
+                <a href="#section-1" class="nav-link">
+                    <i class="fas fa-ticket-alt"></i>
+                    Achat de billets
+                </a>
+                <a href="#section-2" class="nav-link">
+                    <i class="fas fa-credit-card"></i>
+                    Paiement
+                </a>
+                <a href="#section-3" class="nav-link">
+                    <i class="fas fa-qrcode"></i>
+                    Tickets & QR Codes
+                </a>
+                <a href="#section-4" class="nav-link">
+                    <i class="fas fa-file-invoice"></i>
+                    Reçus
+                </a>
+                <a href="#section-5" class="nav-link">
+                    <i class="fas fa-shield-alt"></i>
+                    Contrôle d'accès
+                </a>
+                <a href="#section-6" class="nav-link">
+                    <i class="fas fa-user-lock"></i>
+                    Compte utilisateur
+                </a>
+                <a href="#section-7" class="nav-link">
+                    <i class="fas fa-undo"></i>
+                    Annulations
+                </a>
+                <a href="#section-8" class="nav-link">
+                    <i class="fas fa-life-ring"></i>
+                    Support
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    {# ===================== MAIN CONTENT ===================== #}
+    <div class="legal-main">
+        <div class="legal-card">
+            {# Section 1 - Achat de billets #}
+            <section id="section-1" class="legal-section">
+                <div class="section-header">
+                    <div class="section-number">1</div>
+                    <h2 class="section-title">Comment acheter un billet ?</h2>
+                </div>
+
+                <div class="section-content">
+                    <p>
+                        L'achat de billets sur Qataa3.ma est simple et rapide. Voici les étapes à suivre :
+                    </p>
+                    <p>
+                        <strong>1. Parcourez les événements</strong> - Explorez notre catalogue d'événements disponibles 
+                        sur la page d'accueil ou via la recherche.
+                    </p>
+                    <p>
+                        <strong>2. Sélectionnez votre événement</strong> - Cliquez sur l'événement qui vous intéresse 
+                        pour voir tous les détails (date, lieu, description, tarifs).
+                    </p>
+                    <p>
+                        <strong>3. Choisissez vos billets</strong> - Sélectionnez le type de billet (Standard, VIP, etc.) 
+                        et la quantité souhaitée.
+                    </p>
+                    <p>
+                        <strong>4. Validez votre panier</strong> - Vérifiez votre commande et procédez au paiement 
+                        en mode démonstration.
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-info-circle"></i> Bon à savoir</h4>
+                    <p>
+                        Tous les billets sont nominatifs. Assurez-vous de fournir les informations correctes 
+                        lors de votre commande.
+                    </p>
+                </div>
+            </section>
+
+            {# Section 2 - Paiement #}
+            <section id="section-2" class="legal-section">
+                <div class="section-header">
+                    <div class="section-number">2</div>
+                    <h2 class="section-title">Le paiement est-il réel ?</h2>
+                </div>
+
+                <div class="section-content">
+                    <p>
+                        <strong>Non, tous les paiements sur Qataa3.ma sont effectués en mode démonstration.</strong> 
+                        Cela signifie qu'aucune carte bancaire réelle n'est débitée.
+                    </p>
+                    <p>
+                        Le système simule un parcours de paiement complet pour vous permettre de découvrir 
+                        toutes les fonctionnalités de la plateforme :
+                    </p>
+                    <p>
+                        • Génération automatique d'une commande<br>
+                        • Création de tickets avec QR Codes uniques<br>
+                        • Émission d'un reçu de paiement au format PDF<br>
+                        • Historique de vos transactions dans votre espace client
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-shield-alt"></i> Sécurité</h4>
+                    <p>
+                        Dans un environnement de production réel, toutes les transactions seraient sécurisées 
+                        par cryptage SSL/TLS et conformes aux normes PCI-DSS.
+                    </p>
+                </div>
+            </section>
+
+            {# Section 3 - Tickets & QR Codes #}
+            <section id="section-3" class="legal-section">
+                <div class="section-header">
+                    <div class="section-number">3</div>
+                    <h2 class="section-title">Où trouver mes tickets et leurs QR Codes ?</h2>
+                </div>
+
+                <div class="section-content">
+                    <p>
+                        Après confirmation de votre commande, vos tickets sont immédiatement disponibles dans 
+                        la rubrique <em>"Mes tickets"</em> de votre espace client.
+                    </p>
+                    <p>
+                        <strong>Chaque ticket comprend :</strong>
+                    </p>
+                    <p>
+                        • Un <strong>QR Code unique</strong> qui sert de preuve d'achat<br>
+                        • Les informations de l'événement (nom, date, lieu)<br>
+                        • Votre nom et les détails du billet (catégorie, prix)<br>
+                        • Le statut du ticket (valide, utilisé, annulé)
+                    </p>
+                    <p>
+                        Vous pouvez télécharger ou imprimer vos tickets à tout moment avant l'événement.
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-mobile-alt"></i> Accès mobile</h4>
+                    <p>
+                        Présentez simplement votre ticket sur votre smartphone le jour de l'événement. 
+                        Pas besoin de l'imprimer !
+                    </p>
+                </div>
+            </section>
+
+            {# Section 4 - Reçus #}
+            <section id="section-4" class="legal-section">
+                <div class="section-header">
+                    <div class="section-number">4</div>
+                    <h2 class="section-title">Comment télécharger mon reçu de paiement ?</h2>
+                </div>
+
+                <div class="section-content">
+                    <p>
+                        Un <strong>reçu de paiement au format PDF</strong> est généré automatiquement pour chaque 
+                        commande validée.
+                    </p>
+                    <p>
+                        Pour y accéder :
+                    </p>
+                    <p>
+                        <strong>1.</strong> Connectez-vous à votre espace client<br>
+                        <strong>2.</strong> Accédez à la section <em>"Mes reçus"</em> ou <em>"Historique des commandes"</em><br>
+                        <strong>3.</strong> Cliquez sur le bouton "Télécharger le reçu" à côté de votre commande
+                    </p>
+                    <p>
+                        Le reçu contient tous les détails de votre transaction : montant total, détail des billets, 
+                        date d'achat, et la mention <em>"Mode Démonstration - Aucun paiement réel effectué"</em>.
+                    </p>
+                </div>
+            </section>
+
+            {# Section 5 - Contrôle d'accès #}
+            <section id="section-5" class="legal-section">
+                <div class="section-header">
+                    <div class="section-number">5</div>
+                    <h2 class="section-title">Comment les tickets sont-ils contrôlés le jour de l'événement ?</h2>
+                </div>
+
+                <div class="section-content">
+                    <p>
+                        Le jour de l'événement, le <strong>responsable ou organisateur</strong> dispose d'un outil 
+                        de scan des QR Codes à l'entrée.
+                    </p>
+                    <p>
+                        <strong>Processus de validation :</strong>
+                    </p>
+                    <p>
+                        <strong>1. Scan du QR Code</strong> - Le responsable scanne votre ticket avec son smartphone 
+                        ou tablette.
+                    </p>
+                    <p>
+                        <strong>2. Vérification instantanée</strong> - Le système vérifie en temps réel la validité 
+                        du ticket dans la base de données.
+                    </p>
+                    <p>
+                        <strong>3. Validation unique</strong> - Un ticket déjà scanné est immédiatement marqué comme 
+                        "utilisé" et ne peut plus être validé une seconde fois.
+                    </p>
+                    <p>
+                        <strong>4. Confirmation visuelle</strong> - Un message s'affiche : ✅ "Ticket valide" ou 
+                        ❌ "Ticket déjà utilisé".
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Protection anti-fraude</h4>
+                    <p>
+                        Cette technologie empêche l'utilisation frauduleuse de tickets copiés ou partagés. 
+                        Seul le premier scan est accepté.
+                    </p>
+                </div>
+            </section>
+
+            {# Section 6 - Compte utilisateur #}
+            <section id="section-6" class="legal-section">
+                <div class="section-header">
+                    <div class="section-number">6</div>
+                    <h2 class="section-title">Comment gérer mon compte utilisateur ?</h2>
+                </div>
+
+                <div class="section-content">
+                    <p>
+                        Votre espace client vous permet de gérer toutes vos informations personnelles et 
+                        vos réservations en un seul endroit.
+                    </p>
+                    <p>
+                        <strong>Fonctionnalités disponibles :</strong>
+                    </p>
+                    <p>
+                        • <strong>Profil</strong> - Modifier vos informations personnelles (nom, email, téléphone, adresse)<br>
+                        • <strong>Sécurité</strong> - Changer votre mot de passe<br>
+                        • <strong>Mes tickets</strong> - Consulter et télécharger tous vos billets<br>
+                        • <strong>Historique</strong> - Voir toutes vos commandes passées<br>
+                        • <strong>Reçus</strong> - Télécharger vos justificatifs de paiement
+                    </p>
+                    <p>
+                        Pour accéder à votre espace, cliquez sur votre nom en haut à droite après connexion.
+                    </p>
+                </div>
+            </section>
+
+            {# Section 7 - Annulations #}
+            <section id="section-7" class="legal-section">
+                <div class="section-header">
+                    <div class="section-number">7</div>
+                    <h2 class="section-title">Puis-je annuler ma commande ?</h2>
+                </div>
+
+                <div class="section-content">
+                    <p>
+                        En mode démonstration, il n'y a pas de procédure d'annulation formelle puisqu'aucun 
+                        paiement réel n'a été effectué.
+                    </p>
+                    <p>
+                        <strong>Dans un environnement de production réel :</strong>
+                    </p>
+                    <p>
+                        • Les annulations seraient possibles jusqu'à <em>48 heures avant l'événement</em><br>
+                        • Un remboursement automatique serait effectué sous 5-7 jours ouvrés<br>
+                        • Des frais de service (5%) pourraient s'appliquer selon les conditions de l'organisateur<br>
+                        • Les tickets annulés seraient automatiquement remis en vente
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-clock"></i> Délai de rétractation</h4>
+                    <p>
+                        Conformément à la législation en vigueur, un droit de rétractation de 14 jours 
+                        s'appliquerait pour tout achat en ligne, sauf pour les événements ayant lieu dans ce délai.
+                    </p>
+                </div>
+            </section>
+
+            {# Section 8 - Support #}
+            <section id="section-8" class="legal-section">
+                <div class="section-header">
+                    <div class="section-number">8</div>
+                    <h2 class="section-title">Comment contacter le support ?</h2>
+                </div>
+
+                <div class="section-content">
+                    <p>
+                        Notre équipe de support est disponible pour répondre à toutes vos questions et 
+                        résoudre vos problèmes.
+                    </p>
+                    <p>
+                        <strong>Moyens de contact :</strong>
+                    </p>
+                    <p>
+                        • <strong>Email :</strong> <a href="mailto:support@qataa3.ma" style="color: #667eea; font-weight: 600;">support@qataa3.ma</a><br>
+                        • <strong>Formulaire de contact :</strong> Disponible sur la page "Contact"<br>
+                        • <strong>Délai de réponse :</strong> Sous 24-48 heures en jours ouvrés
+                    </p>
+                    <p>
+                        Pour une assistance plus rapide, précisez dans votre message :
+                    </p>
+                    <p>
+                        ✓ Votre numéro de commande<br>
+                        ✓ La nature de votre demande<br>
+                        ✓ Des captures d'écran si nécessaire
+                    </p>
+                </div>
+
+                <div class="contact-box">
+                    <h3>Besoin d'aide supplémentaire ?</h3>
+                    <p>Notre équipe est là pour vous accompagner !</p>
+                    <a href="{{ path('app_contact') }}" class="btn-contact">
+                        <i class="fas fa-envelope"></i>
+                        Contactez-nous
+                    </a>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Smooth Scroll
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 120;
+                    const targetPosition = target.offsetTop - offset;
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Active Link on Scroll
+        const sections = document.querySelectorAll('.legal-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                if (pageYOffset >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+{% endblock %}
